@@ -252,7 +252,7 @@ const K={
   cav   :{n:'騎',ne:'Horse',hp:160,dmg:17,rng:12,spd:58,cd:1.0,sight:160,size:6, cost:48,r:5.4,horse:1},
   hcav  :{n:'弓騎',ne:'H.Archer',hp:120,dmg:8,rng:80,spd:55,cd:1.3,sight:170,size:6,cost:60,r:5.4,horse:1,ranged:1,lv:2,lvN:6},
   gen   :{n:'将軍',ne:'General',hp:1400,dmg:34,rng:12,spd:50,cd:.9,sight:200,size:1,cost:400,r:6.4,horse:1,gen:1},
-  aka   :{n:'赤備',ne:'Akazonae',hp:300,dmg:26,rng:12,spd:63,cd:1.0,sight:160,size:6,cost:96,r:5.6,horse:1,charge:1},
+  aka   :{n:'赤備',ne:'Akazonae',hp:300,dmg:26,rng:12,spd:63,cd:1.0,sight:160,size:6,cost:96,r:5.6,horse:1,charge:1,lvN:26},
   ninja :{n:'忍',ne:'Ninja',hp:70,dmg:0,rng:0,spd:60,cd:9,sight:270,size:1,cost:40,r:3.6,ninja:1,large:1},
   cannon:{n:'大砲',ne:'Cannon',hp:230,dmg:32,rng:215,spd:11,cd:5,sight:230,size:1,cost:100,r:7,ranged:1,siege:1,minr:40,lv:3},
   tower :{n:'櫓',ne:'Tower',hp:800,dmg:13,rng:118,spd:0,cd:1.0,size:1,cost:70,r:9,ranged:1,build:1,elev:.35},
@@ -264,6 +264,8 @@ const K={
   ship  :{n:'船',ne:'Warship',hp:1500,dmg:22,rng:115,spd:40,cd:1.1,sight:190,size:1,cost:100,r:9,ranged:1,ship:1,cap:20,tier:1,lv:4,lvN:16},
   ship2 :{n:'関船',ne:'Sekibune',hp:3400,dmg:30,rng:125,spd:36,cd:.9,sight:210,size:1,cost:150,r:11.5,ranged:1,ship:1,cap:40,tier:2},
   ship3 :{n:'安宅船',ne:'Atakebune',hp:7500,dmg:42,rng:140,spd:30,cd:.75,sight:230,size:1,cost:300,r:14.5,ranged:1,ship:1,cap:80,tier:3},
+  ship4 :{n:'鉄甲船',ne:'Tekkosen',hp:16000,dmg:60,rng:160,spd:26,cd:.7,sight:250,size:1,cost:600,r:18,ranged:1,ship:1,cap:300,tier:4},
+  yard  :{n:'造船所',ne:'Shipyard',hp:3600,dmg:0,rng:0,spd:0,cd:9,size:1,cost:400,r:14,build:1,dock:1,yard:1},
   dock  :{n:'船着場',ne:'Dock',hp:1600,dmg:0,rng:0,spd:0,cd:9,size:1,cost:80,r:10,build:1,dock:1,lv:4,lvN:16},
   eng   :{n:'工兵',ne:'Sappers',hp:70,dmg:5,rng:10,spd:28,cd:.9,sight:130,size:6,cost:36,r:4.3,eng:1},
   shrine:{n:'神社',ne:'Shrine',hp:2200,dmg:0,rng:0,spd:0,cd:9,size:1,cost:250,r:15,build:1,shrine:1},
@@ -451,17 +453,19 @@ function myMon(){return SAVE.mon||'fujidomoe';}
 // 全国戦: five provinces make one region; the conquest starts in the Kantō, as Minamoto no Yoritomo's did
 const REGIONS=[['関東',['伊豆','相模','武蔵','安房','上総']],['坂東',['下総','常陸','下野','上野','甲斐']],['東海',['駿河','遠江','三河','尾張','美濃']],
   ['北陸',['信濃','越後','越中','加賀','越前']],['畿内',['近江','山城','大和','河内','摂津']],['山陽',['播磨','備前','備中','安芸','長門']],
-  ['四国',['淡路','阿波','讃岐','伊予','土佐']],['九州',['筑前','豊後','肥後','日向','薩摩']],['奥羽',['出羽','陸奥','佐渡','能登','飛騨']]];
+  ['四国',['淡路','阿波','讃岐','伊予','土佐']],['九州',['筑前','豊後','肥後','日向','薩摩']],['奥羽',['出羽','陸奥','佐渡','能登','飛騨']],
+  ['任那',['金官','小加耶','安羅','多羅','大加耶']],['北海道',['後志','石狩','天塩','北見','根室']]];
 const PROV_EN={伊豆:'Izu',相模:'Sagami',武蔵:'Musashi',安房:'Awa',上総:'Kazusa',下総:'Shimosa',常陸:'Hitachi',下野:'Shimotsuke',上野:'Kozuke',甲斐:'Kai',駿河:'Suruga',遠江:'Totomi',三河:'Mikawa',尾張:'Owari',美濃:'Mino',
   信濃:'Shinano',越後:'Echigo',越中:'Etchu',加賀:'Kaga',越前:'Echizen',近江:'Omi',山城:'Yamashiro',大和:'Yamato',河内:'Kawachi',摂津:'Settsu',播磨:'Harima',備前:'Bizen',備中:'Bitchu',安芸:'Aki',長門:'Nagato',
-  淡路:'Awaji',阿波:'Awa',讃岐:'Sanuki',伊予:'Iyo',土佐:'Tosa',筑前:'Chikuzen',豊後:'Bungo',肥後:'Higo',日向:'Hyuga',薩摩:'Satsuma',出羽:'Dewa',陸奥:'Mutsu',佐渡:'Sado',能登:'Noto',飛騨:'Hida'};
-const REGION_EN={関東:'Kanto',坂東:'Bando',東海:'Tokai',北陸:'Hokuriku',畿内:'Kinai',山陽:'San-yo',四国:'Shikoku',九州:'Kyushu',奥羽:'Ou'};
+  淡路:'Awaji',阿波:'Awa',讃岐:'Sanuki',伊予:'Iyo',土佐:'Tosa',筑前:'Chikuzen',豊後:'Bungo',肥後:'Higo',日向:'Hyuga',薩摩:'Satsuma',出羽:'Dewa',陸奥:'Mutsu',佐渡:'Sado',能登:'Noto',飛騨:'Hida',
+  金官:'Geumgwan',小加耶:'Sogaya',安羅:'Ara',多羅:'Dara',大加耶:'Daegaya',後志:'Shiribeshi',石狩:'Ishikari',天塩:'Teshio',北見:'Kitami',根室:'Nemuro'};
+const REGION_EN={関東:'Kanto',坂東:'Bando',東海:'Tokai',北陸:'Hokuriku',畿内:'Kinai',山陽:'San-yo',四国:'Shikoku',九州:'Kyushu',奥羽:'Ou',任那:'Mimana',北海道:'Hokkaido'};
 function pn(p){return EN()?PROV_EN[p]||p:p+'国';}// province name as shown ("伊豆国" / "Izu")
 function rn(r){return EN()?REGION_EN[r]||r:r;}
 function armyLabel(n){if(!EN()||!n)return n;const m=n.match(/^(.+?)国軍$/);if(m)return(PROV_EN[m[1]]||m[1])+' Army';const r=n.match(/^(.+?)軍$/);return r?(REGION_EN[r[1]]||r[1])+' Army':n;}
 function provOf(level){const k=Math.floor((level-1)/5),st=(level-1)%5,R=REGIONS[k%REGIONS.length],round=Math.floor(k/REGIONS.length);
   return{region:R[0],prov:R[1][st],round,get label(){return EN()?`${REGION_EN[R[0]]} - ${PROV_EN[R[1][st]]}${round?' (round '+(round+1)+')':''}`:`${R[0]}・${R[1][st]}国${round?'（'+(round+1)+'巡目）':''}`;}};}
-function enemyStr(L){return .71+.065*(L-1);}
+function enemyStr(L){return MODE==='nation'&&L>45?1.5:.71+.065*(L-1);}// hidden regions: a fixed 150%
 const DIFF=[{n:'やさしい',ne:'Easy',em:.85,mp:.8},{n:'ふつう',ne:'Normal',em:1,mp:1},{n:'きびしい',ne:'Hard',em:1.15,mp:1.2}];
 
 /* ---------- world: terrain, rivers, crags, forests, roads, forts ---------- */
@@ -510,19 +514,56 @@ const SHAPES=[
  {b:[132.0,32.7,135.05,34.62],sx:.33,tx:.62,ty:.22,land:[[[132.0,33.36],[132.4,33.45],[132.7,33.9],[133.0,34.05],[133.4,33.95],[133.7,34.2],[134.1,34.35],[134.45,34.2],[134.6,34.1],[134.65,33.85],[134.75,33.8],[134.35,33.4],[134.18,33.25],[133.7,33.5],[133.3,33.35],[133.0,32.72],[132.7,32.9],[132.5,33.2]],
    [[134.9,34.6],[135.02,34.55],[134.85,34.22],[134.7,34.28]]]},
  {b:[129.6,31.0,132.1,34.0],sx:.4,tx:.48,land:[[[130.2,33.6],[130.9,33.95],[131.2,33.6],[131.7,33.65],[131.85,33.3],[131.9,32.8],[131.45,31.9],[131.35,31.45],[131.05,31.1],[130.66,31.02],[130.75,31.5],[130.55,31.2],[130.2,31.3],[130.3,31.9],[130.55,32.35],[130.45,32.8],[130.4,33.1],[130.2,33.15],[130.0,32.8],[130.1,32.6],[129.85,32.7],[129.7,33.05],[129.8,33.35],[130.0,33.5]]]},
- {b:[139.4,37.0,142.1,41.55],sx:.5,tx:.63,ty:.05,land:[[[139.4,37.0],[141.0,37.0],[141.0,37.6],[140.95,38.1],[141.5,38.3],[141.6,38.9],[141.9,39.3],[141.95,40.0],[141.5,40.55],[141.45,41.4],[140.9,41.5],[141.2,41.1],[140.8,40.85],[140.3,41.2],[139.95,40.6],[140.0,40.0],[139.7,39.9],[140.0,39.4],[139.8,38.9],[139.55,38.4],[139.45,38.1],[139.4,37.9]]]}];
+ {b:[139.4,37.0,142.1,41.55],sx:.5,tx:.63,ty:.05,land:[[[139.4,37.0],[141.0,37.0],[141.0,37.6],[140.95,38.1],[141.5,38.3],[141.6,38.9],[141.9,39.3],[141.95,40.0],[141.5,40.55],[141.45,41.4],[140.9,41.5],[141.2,41.1],[140.8,40.85],[140.3,41.2],[139.95,40.6],[140.0,40.0],[139.7,39.9],[140.0,39.4],[139.8,38.9],[139.55,38.4],[139.45,38.1],[139.4,37.9]]]},
+ {b:[127.6,34.7,129.45,36.2],sx:.45,tx:.35,land:[[[127.6,36.2],[129.42,36.2],[129.4,35.9],[129.45,35.5],[129.3,35.3],[129.13,35.12],[128.98,35.06],[128.8,35.08],[128.68,35.05],[128.6,35.18],[128.52,35.12],[128.5,34.95],[128.42,34.82],[128.3,34.9],[128.15,34.92],[128.05,34.98],[127.95,34.86],[127.8,34.8],[127.72,34.76],[127.6,34.85]],[[128.5,35.0],[128.72,35.02],[128.73,34.84],[128.58,34.74],[128.5,34.85]]]},
+ {b:[139.8,41.35,145.8,45.6],sx:.08,tx:.9,land:[[[140.1,41.42],[140.35,41.55],[140.73,41.77],[141.15,41.8],[140.95,41.98],[140.6,42.1],[140.27,42.25],[140.38,42.52],[140.86,42.47],[140.97,42.32],[141.3,42.5],[141.6,42.63],[142.2,42.4],[142.77,42.16],[143.25,41.92],[143.32,42.28],[143.6,42.6],[144.38,42.98],[144.85,43.03],[145.58,43.33],[145.3,43.6],[145.1,43.85],[145.33,44.34],[144.9,43.95],[144.27,44.02],[143.35,44.36],[142.58,44.93],[141.94,45.52],[141.68,45.4],[141.65,44.88],[141.63,43.94],[141.4,43.6],[141.3,43.25],[141.0,43.2],[140.45,43.38],[140.5,42.98],[140.23,42.8],[139.85,42.45],[140.13,41.87]]]}];
+// 任那's first battle is a landing: your camp on the coast of northern Kyushu, the enemy across the strait (Iki and Tsushima between)
+const SHAPE_LANDING={landing:1,naval:1,b:[128.3,33.25,130.6,35.75],sx:.8,tx:.25,land:[
+  [[129.55,33.25],[129.6,33.4],[129.8,33.5],[129.98,33.47],[130.1,33.55],[130.2,33.6],[130.35,33.62],[130.42,33.6],[130.5,33.75],[130.55,33.85],[130.6,33.9],[130.6,33.25]],
+  [[129.65,33.73],[129.78,33.75],[129.8,33.85],[129.7,33.83]],
+  [[129.2,34.1],[129.35,34.15],[129.5,34.65],[129.45,34.7],[129.3,34.55],[129.17,34.3]],
+  [[128.3,35.75],[129.38,35.75],[129.4,35.55],[129.3,35.32],[129.13,35.12],[128.98,35.06],[128.8,35.08],[128.68,35.05],[128.6,35.18],[128.52,35.12],[128.5,34.95],[128.42,34.82],[128.3,34.9]],
+  [[128.5,35.0],[128.72,35.02],[128.73,34.84],[128.58,34.74],[128.5,34.85]]]};
+const LANDING_SEED=-77;
+// hidden regions after 奥羽: 任那 (from the 46th province) and 北海道
+const HIDDEN_FROM=45;
+function isLanding(level){return provOf(level).region==='任那'&&(level-1)%5===0;}
 function shapeOfKuni(kuni){return SHAPES[((kuni-1)%SHAPES.length+SHAPES.length)%SHAPES.length];}
-function regionShape(seed){if(MODE!=='nation')return null;return shapeOfKuni(Math.round((seed-900)/37));}
+function regionShape(seed){if(MODE!=='nation')return null;if(seed===LANDING_SEED)return SHAPE_LANDING;return shapeOfKuni(Math.round((seed-900)/37));}
 // the map keeps each region's real proportions (same area as before)
-function nationDims(level){const sh=shapeOfKuni(Math.floor((level-1)/5)+1),b=sh.b,r=clamp((b[2]-b[0])*Math.cos((b[1]+b[3])/2*Math.PI/180)/(b[3]-b[1]),.45,1.35),A=17e6;
+function nationDims(level){const sh=isLanding(level)?SHAPE_LANDING:shapeOfKuni(Math.floor((level-1)/5)+1),b=sh.b,r=clamp((b[2]-b[0])*Math.cos((b[1]+b[3])/2*Math.PI/180)/(b[3]-b[1]),.45,1.35),A=17e6;
   const r64=v=>Math.round(v/64)*64;return{W:r64(Math.sqrt(A*r)),H:r64(Math.sqrt(A/r))};}
 function shapePolys(sh){const b=sh.b,P=([lo,la])=>[(lo-b[0])/(b[2]-b[0])*W,(b[3]-la)/(b[3]-b[1])*H];return{land:sh.land.map(p=>p.map(P)),lakes:(sh.lakes||[]).map(p=>p.map(P))};}
 function inPolyXY(x,y,poly){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],q=poly[j];if((a[1]>y)!==(q[1]>y)&&x<(q[0]-a[0])*(y-a[1])/(q[1]-a[1])+a[0])c=!c;}return c;}
 function pickLandX(PL,v,pref){for(let k=0;k<12;k++){const y=H*(v-k*.012);let best=null,bd=1e9;
   for(let x=60;x<W-60;x+=24){if(!PL.land.some(p=>inPolyXY(x,y,p))||PL.lakes.some(p=>inPolyXY(x,y,p)))continue;const d=Math.abs(x-pref*W);if(d<bd){bd=d;best=x;}}if(best!=null)return best;}return pref*W;}
+// where each province's capital really is (longitude, latitude), so each battle is fought in the right part of the region
+const PROV_LL={伊豆:[138.92,35.12],相模:[139.33,35.35],武蔵:[139.48,35.67],安房:[139.87,35.02],上総:[140.1,35.5],
+  下総:[140.2,35.75],常陸:[140.29,36.19],下野:[139.8,36.4],上野:[139.06,36.39],甲斐:[138.57,35.66],
+  駿河:[138.38,34.98],遠江:[137.85,34.72],三河:[137.3,34.88],尾張:[136.9,35.2],美濃:[136.7,35.42],
+  信濃:[137.97,36.24],越後:[138.25,37.1],越中:[137.02,36.74],加賀:[136.45,36.4],越前:[136.17,35.9],
+  近江:[135.95,35.05],山城:[135.76,35.01],大和:[135.8,34.68],河内:[135.6,34.6],摂津:[135.45,34.72],
+  播磨:[134.69,34.83],備前:[133.92,34.66],備中:[133.72,34.68],安芸:[132.46,34.39],長門:[130.98,34.02],
+  淡路:[134.88,34.34],阿波:[134.55,34.07],讃岐:[133.98,34.3],伊予:[132.9,34.02],土佐:[133.53,33.56],
+  筑前:[130.52,33.51],豊後:[131.6,33.23],肥後:[130.7,32.8],日向:[131.42,31.91],薩摩:[130.55,31.6],
+  出羽:[139.84,38.91],陸奥:[141.0,38.3],佐渡:[138.4,38.0],能登:[136.96,37.04],飛騨:[137.25,36.14],
+  金官:[128.88,35.23],小加耶:[128.32,34.98],安羅:[128.41,35.27],多羅:[128.17,35.57],大加耶:[128.26,35.73],
+  後志:[140.75,42.95],石狩:[141.35,43.06],天塩:[141.7,44.4],北見:[144.0,44.0],根室:[145.3,43.4]};
+// map a province to the region map: real position, kept on land and inside the band where an enemy camp can stand
+function geoTargets(SHP,PL,kuni){
+  const b=SHP.b,names=SHP.landing?['金官','金官','金官','金官','金官']:REGIONS[((kuni-1)%REGIONS.length+REGIONS.length)%REGIONS.length][1],y0=150,y1=PZ-1300;
+  const onLand=(x,y)=>PL.land.some(p=>inPolyXY(x,y,p))&&!PL.lakes.some(p=>inPolyXY(x,y,p));
+  return names.map(n=>{const ll=PROV_LL[n];if(!ll)return null;
+    let x=clamp((ll[0]-b[0])/(b[2]-b[0])*W,90,W-90),y=clamp((b[3]-ll[1])/(b[3]-b[1])*H,y0,y1);
+    if(onLand(x,y))return{x,y};
+    for(let r=40;r<1600;r+=40)for(let a=0;a<6.28;a+=40/r){const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;if(px<90||px>W-90||py<y0||py>y1)continue;if(onLand(px,py))return{x:px,y:py};}
+    return{x,y};});
+}
 async function makeWorld(level,progress){
   const SHP=regionShape(level),PL=SHP?shapePolys(SHP):null;
-  if(SHP){HQP[0].x=Math.round(pickLandX(PL,(H-CFG.hq)/H,SHP.sx));const ty=Math.max(CFG.hq,(SHP.ty||0)*H);HQP[1]={x:Math.round(pickLandX(PL,ty/H,SHP.tx)),y:Math.round(ty)};}
+  let GEO=null;
+  if(SHP){HQP[0].x=Math.round(pickLandX(PL,(H-CFG.hq)/H,SHP.sx));const ty=Math.max(CFG.hq,(SHP.ty||0)*H);HQP[1]={x:Math.round(pickLandX(PL,ty/H,SHP.tx)),y:Math.round(ty)};
+    GEO=geoTargets(SHP,PL,SHP.landing?10:Math.round((level-900)/37));if(GEO[4])HQP[1]={x:Math.round(GEO[4].x),y:Math.round(GEO[4].y)};}
   if(WORLD&&WORLD.seed===level&&WORLD.mode===MODE&&WORLD.blk0){// same map as last time: just clear the old buildings
     blk.set(WORLD.blk0);progress(1,'');return;}
   const R=rng(level*7919+13+(MODE==='nation'?99991:0));
@@ -610,7 +651,7 @@ async function makeWorld(level,progress){
       if(Math.hypot((cx+.5)*CELL-p.x,(cy+.5)*CELL-p.y)<r){if(blk[c]===1)blk[c]=0;forest[c]=0;spd[c]=1;cost[c]=1;}}}
   progress(.2,TT('道を通しています','Laying the roads'));await sleep();
   let f=dijkstra(goalCells(HQP[1].x,HQP[1].y,20));
-  if(f.nb[cellOf(HQP[0].x,HQP[0].y)]<0&&SEA){// the coast cut the way: raise a land bridge along the straight line
+  if(f.nb[cellOf(HQP[0].x,HQP[0].y)]<0&&SEA&&!(SHP&&SHP.naval)){// the coast cut the way: raise a land bridge along the straight line
     const L=Math.hypot(HQP[1].x-HQP[0].x,HQP[1].y-HQP[0].y);
     for(let t=0;t<=L;t+=CELL/2){const x=HQP[0].x+(HQP[1].x-HQP[0].x)*t/L,y=HQP[0].y+(HQP[1].y-HQP[0].y)*t/L;
       for(let dy=-50;dy<=50;dy+=CELL/2)for(let dx=-50;dx<=50;dx+=CELL/2){const c=cellOf(x+dx,y+dy);if(blk[c]===2)blk[c]=0;
@@ -647,7 +688,20 @@ async function makeWorld(level,progress){
   const hqs=[];
   if(MODE==='nation'){
     const okAt=(x,y)=>{const rr=Math.ceil(70/CELL),c0x=x/CELL|0,c0y=y/CELL|0;for(let dy=-rr;dy<=rr;dy++)for(let dx=-rr;dx<=rr;dx++){const cx=c0x+dx,cy=c0y+dy;if(cx<0||cy<0||cx>=GW||cy>=GH)return false;const k=cy*GW+cx;if(blk[k]===2||spd[k]<.9)return false;}return riverD(x,y)[0]>120&&pondD(x,y)>80;};
-    for(const fr of[.9,.7,.45,.2]){const ty=HQP[1].y+(H*.5-HQP[1].y)*fr;let bi=0,bd=1e9;roadPts.forEach((p,i)=>{const d=Math.abs(p[1]-ty);if(d<bd){bd=d;bi=i;}});
+    // each enemy camp at its province's real place: the nearest good ground that your army can reach on foot
+    const fP=GEO?dijkstra(goalCells(SHP&&SHP.naval?HQP[1].x:HQP[0].x,SHP&&SHP.naval?HQP[1].y:HQP[0].y,20)):null;
+    // like okAt, but forest is fine (it is cleared around a camp anyway)
+    const okGeo=(x,y)=>{const rr=Math.ceil(70/CELL),c0x=x/CELL|0,c0y=y/CELL|0;for(let dy=-rr;dy<=rr;dy++)for(let dx=-rr;dx<=rr;dx++){const cx=c0x+dx,cy=c0y+dy;if(cx<0||cy<0||cx>=GW||cy>=GH)return false;const k=cy*GW+cx;if(blk[k]===2)return false;}return riverD(x,y)[0]>110&&pondD(x,y)>80&&blk[cellOf(x,y)]===0;};
+    const geoPick=(t,sep)=>{if(!t||!fP)return null;let best=null,bd=1e9;const st=CELL*2,taken=[...hqs,HQP[1]];
+      for(let r=0;r<1800;r+=st){if(best&&r>bd+st)break;for(let a=0;a<6.28;a+=r?st/r:7){const x=t.x+Math.cos(a)*r,y=t.y+Math.sin(a)*r;if(x<80||x>W-80||y<120||y>PZ-1300)continue;
+        const c=cellOf(x,y);if(fP.D[c]>=1e9||!okGeo(x,y))continue;if(sep&&taken.some(q=>Math.hypot(q.x-x,q.y-y)<sep))continue;const d=Math.hypot(x-t.x,y-t.y);if(d<bd){bd=d;best={x:Math.round(x),y:Math.round(y)};}}}
+        return best;};
+    if(GEO)for(let i=0;i<4;i++){const g=geoPick(GEO[i],420)||geoPick(GEO[i],260)||geoPick(GEO[i],0);if(g){hqs.push(g);continue;}
+      if(!roadPts.length){hqs.push({x:Math.round(GEO[i].x),y:Math.round(GEO[i].y)});continue;}
+      const fr=[.9,.7,.45,.2][i],ty=HQP[1].y+(H*.5-HQP[1].y)*fr;let bi=0,bd=1e9;roadPts.forEach((p,i)=>{const d=Math.abs(p[1]-ty);if(d<bd){bd=d;bi=i;}});
+      let pick=roadPts[bi];for(let o=0;o<roadPts.length;o++){let hit=null;for(const j of[bi-o,bi+o]){const p=roadPts[j];if(p&&okAt(p[0],p[1])){hit=p;break;}}if(hit){pick=hit;break;}}
+      hqs.push({x:pick[0],y:pick[1]});}
+    else for(const fr of[.9,.7,.45,.2]){const ty=HQP[1].y+(H*.5-HQP[1].y)*fr;let bi=0,bd=1e9;roadPts.forEach((p,i)=>{const d=Math.abs(p[1]-ty);if(d<bd){bd=d;bi=i;}});
       let pick=roadPts[bi];for(let o=0;o<roadPts.length;o++){let hit=null;for(const j of[bi-o,bi+o]){const p=roadPts[j];if(p&&okAt(p[0],p[1])){hit=p;break;}}if(hit){pick=hit;break;}}
       hqs.push({x:pick[0],y:pick[1]});}
     hqs.push({x:HQP[1].x,y:HQP[1].y});
@@ -852,17 +906,19 @@ const hu=e=>elev(e.x,e.y)+(e.k.elev||0);
 async function newGame(level,tut,replay){
   const ld=$('#loading');ld.hidden=false;running=false;
   const NAT=MODE==='nation',kuni=NAT?Math.floor((level-1)/5)+1:0,stage=NAT?(level-1)%5+1:0;
-  await makeWorld(NAT?900+kuni*37:level,(p,t)=>{$('#loadBar').style.width=(p*100)+'%';if(t)$('#loadTxt').textContent=t;});
+  const LAND=NAT&&isLanding(level);
+  await makeWorld(NAT?(LAND?LANDING_SEED:900+kuni*37):level,(p,t)=>{$('#loadBar').style.width=(p*100)+'%';if(t)$('#loadTxt').textContent=t;});
   applyStage(stage);
   // this 陣's enemy lord: a name and a crest different from yours
   const ids=KAMON.map(k=>k.id).filter(id=>id!==myMon()),mon=ids[(level*7+kuni*3)%ids.length];
-  if(mon!==ENEMY_MON){ENEMY_MON=mon;buildSprites(1);}
+  const eStyle=NAT?{任那:'gaya',北海道:'ainu'}[provOf(level).region]||'':'';const styChg=setEnemyStyle(eStyle);
+  if(mon!==ENEMY_MON||styChg){ENEMY_MON=mon;buildSprites(1);}
   if(lordTier()!==HQ_TIER)buildBuildingSprites(0);
   const D=DIFF[SAVE.diff??1];
   const em=(tut?.68:enemyStr(level))*D.em;
   const nat=NAT?(SAVE.nat||(SAVE.nat={income:0,camp:null})):null;
   const camp=replay!=null?(nat&&nat.past&&nat.past[replay]?nat.past[replay].camp:null):nat&&nat.camp&&nat.camp.level===level?nat.camp:null;
-  S={replay:replay??null,level,kuni,stage,prov:NAT?provOf(level):null,t:0,phase:'build',buildLeft:BUILD_TIME,battleT:0,
+  S={replay:replay??null,landing:LAND,eStyle,level,kuni,stage,prov:NAT?provOf(level):null,t:0,phase:'build',buildLeft:BUILD_TIME,battleT:0,
      mp:[tut?420:180+(camp?120:0),(50+30*(level-1))*D.mp],reg:[9+2*(level-1)+(nat?nat.income:0),(5+1.8*(level-1))*D.mp],income:nat?nat.income:0,em,sel:[],
      shr:[0,0],waveT:tut?18:MODE==='local'?32:MODE==='region'?42:50,wave:0,thT:0,alarm:0,flank:new Map(),flankPts:[],flT:0,
      ents:[],proj:[],fx:[],marks:[],trenches:[],speed:S?S.speed:1,over:null,
@@ -929,6 +985,10 @@ function saveCampaign(){
     recordPast(nat,c,true);
     nat.camp={level:S.level+1,kuni:S.kuni+1,castles:[],trenches:[],units:c.units,moved:1};save();
     return{pacified:1,add,castles:0,units:c.units.length};}
+  if(S.landing){const c=campCarry(),far=S.ents.filter(e=>e.side===0&&!e.k.build&&!e.k.ship&&e.hp>0).sort((a,b)=>a.y-b.y).slice(0,VETCAP);
+    const units=far.map(e=>({k:e.kind,x:Math.round(e.x),y:Math.round(e.y),q:e.sq,a:e.army||(S.prov.prov+'国軍')}));
+    recordPast(nat,c,false);nat.camp={level:S.level+1,kuni:S.kuni,castles:[],trenches:[],units,moved:1};save();
+    return{castles:0,units:units.length,landed:1};}
   const c=campCarry();c.level=S.level+1;c.kuni=S.kuni;nat.camp=c;
   recordPast(nat,c,false);save();
   return{castles:c.castles.length,units:c.units.length};
@@ -989,16 +1049,21 @@ function mk(side,kind,x,y){
   const k=K[kind],m=side===1?S.em:1;
   const e={id:NID++,side,kind,k,x,y,ax:x,ay:y,hp:k.hp*m,maxhp:k.hp*m,m,cdT:Math.random()*k.cd,rt:Math.random()*.3,tg:null,
     ang:side===0?-Math.PI/2:Math.PI/2,f:side===0?1:-1,r:k.r,hT:-9,hx:0,hy:0,hid:0,pf:-9,st:'hold',sc:.94+Math.random()*.12,ph:Math.random()*4};
+  if(side===1&&S&&S.eStyle&&!k.build){const st=S.eStyle;
+    if(st==='gaya'){const f=k.horse?1.4:1.15;e.hp*=f;e.maxhp*=f;e.sm=.92;}// iron armour and barded horses: tough but slow
+    else if(st==='ainu'){e.hp*=.85;e.maxhp*=.85;e.sm=1.12;if(k.ranged)e.dm=1.35;}}// no armour, quick, poisoned arrows
   S.ents.push(e);return e;
 }
 // soldiers brought from earlier provinces (vet) have their own limit and do not count toward CAP
 const VETCAP=500;
 // ships and the soldiers aboard them sit outside CAP; up to NAVALCAP soldiers can be at sea at once
-const NAVALCAP=500;
+const NAVALCAP=500,NAVALCAP2=1000;// a shipyard lets up to 1000 sail
+function navalCap(side){for(const e of S.ents)if(e.side===side&&e.k.yard&&e.hp>0)return NAVALCAP2;return NAVALCAP;}
 function count(side){let n=0;for(const e of S.ents){if(e.side!==side||e.k.build||e.k.ship||e.vet)continue;n++;}return n}
 function aboardN(side){let n=0;for(const e of S.ents)if(e.side===side&&e.cargo)n+=e.cargo.length;return n}
 /* ---------- ships: docks, boarding and landing ---------- */
 function nearWater(x,y,r){const rr=Math.ceil(r/CELL),c0x=x/CELL|0,c0y=y/CELL|0;for(let dy=-rr;dy<=rr;dy++)for(let dx=-rr;dx<=rr;dx++){const cx=c0x+dx,cy=c0y+dy;if(cx<0||cy<0||cx>=GW||cy>=GH)continue;if(blk[cy*GW+cx]===2&&dx*dx+dy*dy<=rr*rr)return true;}return false;}
+function ownYardNear(x,y,r){let best=null,bd=r;for(const e of S.ents)if(e.side===0&&e.k.yard&&e.hp>0){const d=Math.hypot(e.x-x,e.y-y);if(d<bd){bd=d;best=e;}}return best;}
 function ownDockNear(x,y,r){let best=null,bd=r;for(const e of S.ents)if(e.side===0&&e.k.dock&&e.hp>0){const d=Math.hypot(e.x-x,e.y-y);if(d<bd){bd=d;best=e;}}return best;}
 function dockWaterSpot(d,tx,ty){const g=goalCellsW(d.x,d.y,48);let best=null,bd=1e9;
   for(const c of g){const x=((c%GW)+.5)*CELL,y=(((c/GW)|0)+.5)*CELL;if(Math.hypot(x-d.x,y-d.y)>60)continue;if(S.ents.some(o=>o.k.ship&&Math.hypot(o.x-x,o.y-y)<o.r+10))continue;const v=Math.hypot(x-tx,y-ty);if(v<bd){bd=v;best=[x,y];}}
@@ -1008,7 +1073,7 @@ function cargoN(s){return s.cargo?s.cargo.length:0;}
 function disembark(s){
   if(!s.cargo||!s.cargo.length)return false;
   const tx=s.unload?s.unload.x:s.x,ty=s.unload?s.unload.y:s.y,spots=[];
-  for(let r=s.r+8;r<s.r+90&&spots.length<s.cargo.length*2;r+=6)for(let a=0;a<Math.PI*2;a+=6/r){const x=s.x+Math.cos(a)*r,y=s.y+Math.sin(a)*r;if(passable(x,y))spots.push([x,y,Math.hypot(x-tx,y-ty)+r*2]);}
+  for(let r=s.r+6;r<s.r+150&&spots.length<s.cargo.length*2;r+=6)for(let a=0;a<Math.PI*2;a+=6/r){const x=s.x+Math.cos(a)*r,y=s.y+Math.sin(a)*r;if(passable(x,y))spots.push([x,y,Math.hypot(x-tx,y-ty)+r*2]);}
   if(!spots.length)return false;
   spots.sort((a,b)=>a[2]-b[2]);
   const fl=s.unload?fieldTo(tx,ty):null;
@@ -1127,7 +1192,7 @@ function effRange(u,t){
 
 /* ---------- combat ---------- */
 function attack(u,t){
-  u.atk=S.t;let d=u.k.dmg*u.m;
+  u.atk=S.t;let d=u.k.dmg*u.m*(u.dm||1);
   const cm=COUNTER[cls(u.k)];if(cm&&cm[cls(t.k)])d*=cm[cls(t.k)];
   if(t.k.build)d*=u.k.eng?5:u.k.siege?4:u.k.horse&&!u.k.ranged?.35:u.k.ranged?.5:1.25;
   else if(u.k.siege)d*=.5;
@@ -1154,6 +1219,14 @@ function attack(u,t){
     if(Math.random()<.12)S.fx.push({ty:'dust',x:(u.x+t.x)/2,y:(u.y+t.y)/2+3,life:.6,max:.6});
     if(!t.k.build&&Math.random()<.3&&S.fx.length<400)S.fx.push({ty:'spark',x:(u.x*.4+t.x*.6),y:(u.y*.4+t.y*.6),life:.25,max:.25,a:Math.random()*6.3,h:Math.random()});}
 }
+const WALL_BOW=105;
+function wallShot(u,t){
+  u.atk=S.t;let d=K.archer.dmg*.8*u.m*(1+.05*S.shr[u.side]);
+  const dh=hu(u)-hu(t);d*=dh>0?1+Math.min(.8,dh*6):Math.max(.65,1+dh*3.5);
+  if(!t.k.build&&forest[cellOf(t.x,t.y)])d*=.6;if(t.k.build)d*=.5;
+  const L=Math.hypot(t.x-u.x,t.y-u.y);if(nearCam(u.x,u.y))SFX.bow();
+  S.proj.push({sx:u.x,sy:u.y-6,tx:t.x,ty:t.y-3,t:0,T:L/240+.05,tg:t,d,pin:false,side:u.side,src:u});
+}
 function hit(t,d,pin,src){
   if(t.hp<=0)return;
   t.hp-=d*(1-.05*S.shr[t.side]);
@@ -1163,7 +1236,7 @@ function hit(t,d,pin,src){
 /* ---------- movement & update ---------- */
 function moveStep(u,dx,dy,dt){
   const h0=u.k.ship?0:elev(u.x,u.y),h1=u.k.ship?0:elev(u.x+dx*6,u.y+dy*6);
-  const cc=cellOf(u.x,u.y),sp=u.k.spd*clamp(1-(h1-h0)/6*60,.55,1.6)*spd[cc]*(TR[cc]?.2:1)*(u.chargeT>0?1.25:1);
+  const cc=cellOf(u.x,u.y),sp=(u.sm||1)*u.k.spd*clamp(1-(h1-h0)/6*60,.55,1.6)*spd[cc]*(TR[cc]?.2:1)*(u.chargeT>0?1.25:1);
   const nx=u.x+dx*sp*dt,ny=u.y+dy*sp*dt,here=passU(u,u.x,u.y);
   if(passU(u,nx,ny)||!here){u.x=nx;u.y=ny;}
   else if(passU(u,nx,u.y))u.x=nx;
@@ -1215,12 +1288,11 @@ function updEnt(u,dt){
   }
   if(u.boardOn){const s=u.boardOn;
     if(s.hp<=0)u.boardOn=null;
-    else if(Math.hypot(s.x-u.x,s.y-u.y)<s.r+26){if(cargoN(s)<s.k.cap&&aboardN(u.side)<NAVALCAP){(s.cargo||(s.cargo=[])).push(u);u.boarded=1;u.boardOn=null;S.boardDirty=1;return;}
-      u.boardOn=null;u.st='hold';u.ax=u.x;u.ay=u.y;if(u.side===0&&S.t-(S.fullMsg||-9)>3){S.fullMsg=S.t;toast(cargoN(s)>=s.k.cap?TT('船がいっぱいです（'+s.k.cap+'人まで）','The ship is full ('+s.k.cap+' max)'):TT('船に乗れるのは全部で'+NAVALCAP+'人までです','Up to '+NAVALCAP+' troops can be at sea'));}}
+    else if(Math.hypot(s.x-u.x,s.y-u.y)<s.r+26){if(cargoN(s)<s.k.cap&&aboardN(u.side)<navalCap(u.side)){(s.cargo||(s.cargo=[])).push(u);u.boarded=1;u.boardOn=null;S.boardDirty=1;return;}
+      u.boardOn=null;u.st='hold';u.ax=u.x;u.ay=u.y;if(u.side===0&&S.t-(S.fullMsg||-9)>3){S.fullMsg=S.t;toast(cargoN(s)>=s.k.cap?TT('船がいっぱいです（'+s.k.cap+'人まで）','The ship is full ('+s.k.cap+' max)'):TT('船に乗れるのは全部で'+navalCap(u.side)+'人までです（造船所があれば1000人）','Up to '+navalCap(u.side)+' troops can be at sea (1000 with a shipyard)'));}}
     else if(u.st!=='move'){u.st='move';u.ax=s.x;u.ay=s.y;u.gx=s.x;u.gy=s.y;u.fld=fieldTo(s.x,s.y);}}
   if(k.ship&&u.unload&&cargoN(u)&&(u.st!=='move'||Math.hypot(u.unload.x-u.x,u.unload.y-u.y)<u.r+70)&&(u.unloadT=(u.unloadT||0)-dt)<=0){u.unloadT=.4;
-    let shore=false;for(let a=0;a<6.3&&!shore;a+=.5)for(const r of[u.r+10,u.r+22])if(passable(u.x+Math.cos(a)*r,u.y+Math.sin(a)*r)){shore=true;break;}
-    if(shore)disembark(u);else if(u.st!=='move')u.unload=null;}
+    if(!disembark(u)&&u.st!=='move'){u.unload=null;if(u.side===0)toast(TT('近くに上陸できる陸地がありません','No land close enough to go ashore'));}}
   if(u.chargeT>0)u.chargeT-=dt;
   if(u.trap>0){u.trap-=dt;u.mv=0;u.inR=0;return;}
   if(k.ninja){ninjaScout(u,dt);}
@@ -1232,7 +1304,8 @@ function updEnt(u,dt){
     if(k.ninja)u.tg=null;
     else if(k.eng)u.tg=findTarget(u,st==='hold'?80:k.sight,true)||findTarget(u,40);
     else if(k.siege)u.tg=findTarget(u,effR0(u),true)||findTarget(u,st==='hold'?effR0(u):k.sight);
-    else u.tg=findTarget(u,st==='move'?26:st==='hold'?(k.ranged?Math.max(80,k.rng):80):G?(G.cmd==='atk'?k.sight:(k.ranged?Math.max(95,k.rng):95)):k.sight);}
+    else{if(!k.ranged&&!k.ship&&!k.ninja)u.inWall=S.phase==='battle'&&st==='hold'&&behindWall(u.x,u.y,u.side);
+    u.tg=findTarget(u,st==='move'?26:st==='hold'?(k.ranged?Math.max(80,k.rng):u.inWall?WALL_BOW:80):G?(G.cmd==='atk'?k.sight:(k.ranged?Math.max(95,k.rng):95)):k.sight);}}
   let t=u.tg;
   if(t&&t.hp<=0)t=u.tg=null;
   if(t&&st==='hold'&&Math.hypot(t.x-u.ax,t.y-u.ay)>130)t=u.tg=null;
@@ -1243,7 +1316,9 @@ function updEnt(u,dt){
     if(best){best.hp-=dt*7;u.inR=1;u.atk=S.t-(S.t%1<.5?0:1);if(Math.random()<.05)S.fx.push({ty:'dust',x:best.x,y:best.y,life:.6,max:.6});
       if(best.hp<=0){fillTrench(best);if(best.x&&nearCam(best.x,best.y))toast(TT('敵の工兵に堀を埋められた！','Enemy sappers filled in a moat!'));}u.mv=0;return;}
   }
-  if(t){
+  if(t&&u.inWall&&st==='hold'&&gap(u,t)>k.rng+3&&gap(u,t)<=WALL_BOW){// shoot from behind the wall instead of leaving it
+    u.inR=1;u.ang=Math.atan2(t.y-u.y,t.x-u.x);if(u.cdT<=0){wallShot(u,t);u.cdT=1.6*(.9+Math.random()*.2);}t=null;}
+  else if(t){
     const dx=t.x-u.x,dy=t.y-u.y,dd=Math.hypot(dx,dy)||1;
     const g=gap(u,t);
     if(g<=effRange(u,t)&&!(k.minr&&g<k.minr)){
@@ -1370,6 +1445,7 @@ function pickKind(){
   for(const e of S.ents)if(e.side===0&&c[e.kind]!==undefined)c[e.kind]++;
   const w={sword:3+c.spear/12,spear:2.5+c.cav/8,archer:2.5+c.sword/12,cav:1.8+c.archer/9};
   if(S.level>=lvOf('hcav'))w.hcav=1.2+c.sword/20;
+  if(S.eStyle==='ainu'){delete w.cav;delete w.hcav;w.archer+=1.2;}// the Ainu fight on foot, with bows
   if(S.phase==='battle'){let ob=S.trenches.length/6;for(const e of S.ents)if(e.side===0&&(e.k.hw||e.kind==='tower'||e.kind==='keep'))ob+=.25;w.eng=.3+Math.min(3,ob);}
   let tot=0;for(const k in w)tot+=w[k];let r=Math.random()*tot;
   for(const k in w){r-=w[k];if(r<=0)return k;}return'sword';
@@ -1522,10 +1598,10 @@ function visAt(x,y){return!FOG||FV[clamp(y/FC|0,0,FH-1)*FW+clamp(x/FC|0,0,FW-1)]
 /* ---------- fortification upgrades: 柵 → 砦 → 城 ---------- */
 function upgradeAt(x,y){
   let best=null,bd=26;
-  const UPN={fence:'wall',wall:'wall2',tower:'keep',keep:'keep2',ship:'ship2',ship2:'ship3'};
+  const UPN={fence:'wall',wall:'wall2',tower:'keep',keep:'keep2',ship:'ship2',ship2:'ship3',ship3:'ship4',dock:'yard'};
   for(const e of S.ents){if(e.side!==0||!UPN[e.kind])continue;const d=Math.hypot(e.x-x,e.y-y)-(e.k.ship?e.r:0);if(d<bd){bd=d;best=e;}}
   if(!best)return'none';
-  if(best.k.ship&&!ownDockNear(best.x,best.y,110))return'dock';
+  if(best.k.ship){if(UPN[best.kind]==='ship4'){if(!ownYardNear(best.x,best.y,150))return'yard';}else if(!ownDockNear(best.x,best.y,110))return'dock';}
   const nk=UPN[best.kind],k=K[nk];
   if(S.mp[0]<k.cost)return'mp:'+k.cost;
   S.mp[0]-=k.cost;
@@ -1547,7 +1623,7 @@ function markBuilding(e,on){
 
 /* ---------- mid-battle save: a long 全国戦 can be closed and resumed ---------- */
 const MIDKEY='yaji-v3-mid';
-const EF=['id','side','kind','x','y','hp','maxhp','m','st','ax','ay','gx','gy','sq','guard','then','trap','full','n','seen','chargeT','gox','goy','cmd','ret0','f','vet','army'];
+const EF=['sm','dm','id','side','kind','x','y','hp','maxhp','m','st','ax','ay','gx','gy','sq','guard','then','trap','full','n','seen','chargeT','gox','goy','cmd','ret0','f','vet','army'];
 function snapshot(){
   const r=v=>typeof v==='number'?Math.round(v*10)/10:v;
   const ents=S.ents.filter(e=>e.hp>0).map(e=>{const o={};for(const k of EF)if(e[k]!=null)o[k]=r(e[k]);if(e.home)o.home=[r(e.home.x),r(e.home.y)];if(e.lord)o.lord=e.lord.id;if(e.cargo&&e.cargo.length)o.cargo=e.cargo.map(c=>({kind:c.kind,sq:c.sq,hp:r(c.hp),maxhp:c.maxhp,vet:c.vet,army:c.army}));return o;});
@@ -1569,7 +1645,8 @@ function restoreSnapshot(sn){
   for(const o of sn.ents){if(!K[o.kind]||(!K[o.kind].build&&!UNITK.includes(o.kind)&&!K[o.kind].ship))continue;const e=mk(o.side,o.kind,o.x,o.y);Object.assign(e,o);e.k=K[o.kind];e.r=e.k.r;if(o.home)e.home={x:o.home[0],y:o.home[1]};e.lord=null;byId.set(e.id,[e,o]);
     if(e.k.build)markBuilding(e,true);if(e.kind==='hq'&&e.side===0)S.hq[0]=e;
     if(o.cargo){delete e.cargo;e.cargo=o.cargo.map(c=>{const u=mk(e.side,c.kind,e.x,e.y);S.ents.pop();Object.assign(u,{sq:c.sq,hp:c.hp,maxhp:c.maxhp||u.maxhp,vet:c.vet,army:c.army,st:'hold',boarded:1});return u;});}}
-  S.ehq=S.ents.filter(e=>e.kind==='hq'&&e.side===1);const live=S.ehq.find(e=>e.hp>0)||S.ehq[0];if(live){S.hq[1]=live;HQP[1]={x:live.x,y:live.y};}
+  S.ehq=S.ents.filter(e=>e.kind==='hq'&&e.side===1);const live=S.ehq.find(e=>e.hp>0)||S.ehq[0];if(live){S.hq[1]=live;HQP[1]={x:live.x,y:live.y};
+    if(MODE==='nation'){const ys=S.ehq.map(e=>e.y);EZ=Math.min(PZ-900,Math.max(...ys)+630);EZ0=Math.max(0,Math.min(...ys)-560);}}
   for(const[,[e,o]]of byId)if(o.lord&&byId.has(o.lord))e.lord=byId.get(o.lord)[0];
   sn.trenches.forEach(t=>{tryTrench(t[0],t[1],t[2],true);const T=S.trenches[S.trenches.length-1];if(T)T.hp=t[3];});
   NID=Math.max(NID,sn.nid||0);SQID=Math.max(SQID,sn.sqid||0);
@@ -1627,6 +1704,12 @@ const FLAGS=[
 function flagC(){let id='gold';try{id=SAVE.flag||'gold';}catch(e){}return FLAGS.find(f=>f.id===id)||FLAGS[0];}
 let VETC='#ecd08e';
 function applyFlag(){const f=flagC();PAL[0].flag=f.c;PAL[0].flagD=f.d;COL[0]=f.ui;VETC=shade(f.ui.length===7?f.ui:'#d9a93a',.42);}
+// hidden regions field foreign armies: Gaya iron lamellar with plumed helmets and barded horses; Ainu bark-cloth robes, no armour, no horses
+const PAL_BASE1={...PAL[1]};
+const EPALS={gaya:{arm:'#4b5057',armL:'#a3abb4',lace:'#b22a20',lace2:'#d9cfb8',cloth:'#6e2620',flag:'#b8322a',flagD:'#5e1712',mon:1,style:'gaya'},
+  ainu:{arm:'#b49a6a',armL:'#d8c79c',lace:'#23345a',lace2:'#b8322a',cloth:'#2a3550',flag:'#2a3550',flagD:'#121a30',mon:1,style:'ainu'}};
+let STY='';
+function setEnemyStyle(st){const want=st||'';if((PAL[1].style||'')===want)return false;Object.keys(PAL[1]).forEach(k=>delete PAL[1][k]);Object.assign(PAL[1],want?EPALS[want]:PAL_BASE1);return true;}
 const SPR={},FALL={};
 function shade(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
   if(f>0){r+=(255-r)*f;g+=(255-g)*f;b+=(255-b)*f;}else{r*=1+f;g*=1+f;b*=1+f;}
@@ -1644,6 +1727,7 @@ function buildSprites(only){
     if(!SPR[kind]){SPR[kind]=[[],[]];FALL[kind]=[[],[]];}
     for(let side=0;side<2;side++){
       if(only!=null&&side!==only)continue;
+      STY=PAL[side].style||'';
       // one small atlas per kind and side: 3 facings (right, left, and back for us / front for the enemy)
       // x 6 poses (idle, two walking steps, wind-up, strike, spear wall), plus a half-size copy for normal zoom
       const CW=Math.round(SWD*SS),CH=Math.round(SHT*SS),A=document.createElement('canvas');A.width=CW*POSES.length;A.height=CH*3;
@@ -1673,12 +1757,15 @@ function buildSprites(only){
       }
     }
   }
+  STY='';
 }
 function mon(g,cx,cy,r,p){drawMon(g,p.mon===0?myMon():ENEMY_MON,cx,cy,r,p.mon===0?'#1a1a1e':p.flagD,'#f6f1e4');}
 
 /* ---------- colours for one soldier ---------- */
 function kit(kind,p){
   const k={kind,sam:!!SAMK[kind],helm:!!HELMK[kind],arm:p.arm,armL:p.armL,lace:p.lace,lace2:p.lace2,cloth:p.cloth,p};
+  if(p.style==='ainu'){k.sam=false;k.helm=false;}
+  if(p.style==='gaya'){k.helm=true;}
   if(kind==='aka')Object.assign(k,{arm:'#b3211a',armL:'#e45a44',lace:'#e8b848',lace2:'#ffe2a0',cloth:'#5a1510'});
   if(kind==='gen')Object.assign(k,{arm:'#1c1a1f',armL:'#5c5866',lace:'#e0b446',lace2:'#fff0b8'});
   return k;
@@ -1758,7 +1845,8 @@ function torsoSide(g,K2,fr,ph){
   if(sam){// lamellar rows with lacing
     for(let i=1;i<=6;i++){const y=-6.6-i*.5;ln(g,-1.4+(i>4?.15:0),y,1.5-(i>4?.2:0),y,i%2?K2.lace:K2.lace2,.12);}
     for(let x=-1.1;x<1.3;x+=.36)ln(g,x,-9.7,x+.05,-6.8,'rgba(0,0,0,.2)',.06);
-  }else{
+  }else if(STY==='ainu'){ainuPattern(g,-1.45,1.5,-9.6,-6.8);}
+  else{
     for(const y of[-7.4,-8.2,-9.0])ln(g,-1.45,y,1.5,y,'rgba(0,0,0,.4)',.12);
     ln(g,-1.45,-8.2+.08,1.5,-8.2+.08,'rgba(255,255,255,.12)',.08);
   }
@@ -1768,12 +1856,33 @@ function torsoSide(g,K2,fr,ph){
   if(sam&&K2.kind!=='sword'&&K2.kind!=='gen'){ln(g,.3,-6.5,-3.4,-5.3,'#17130f',.55);ln(g,.3,-6.5,1.3,-6.9,GOLD,.25);}
   if(K2.kind==='sword'||K2.kind==='gen'){ln(g,.3,-6.4,-3.2,-5.2,'#17130f',.5);}// scabbard
 }
+function foreignHead(g,K2,x,front,back){// side (front=false) or front/back view of a Gaya or Ainu head
+  if(STY==='gaya'){
+    // iron bowl helmet of riveted strips, lamellar neck guard and a red plume
+    for(let i=0;i<3;i++){const y=-11.5+i*.42,w=front?1.2+i*.25:1.0;if(front)poly(g,[[x-w,y+.45],[x-w+.15,y],[x+w-.15,y],[x+w,y+.45]],shade(K2.arm,-.1*i),INK,.07);else poly(g,[[x+.2,y],[x-1.2-i*.25,y+.08],[x-1.3-i*.27,y+.5],[x+.15,y+.42]],shade(K2.arm,-.1*i),INK,.07);ln(g,x-(front?w:1.2),y+.25,x+(front?w:.1),y+.25,K2.lace,.08);}
+    g.beginPath();g.ellipse(x+(front?0:.05),-12.0,1.1,1.25,0,Math.PI,0);g.closePath();g.fillStyle=lg(g,x-1,-13.2,x+1,-11.8,['#9aa1a8','#4b5057','#1e2125']);g.fill();g.strokeStyle=INK;g.lineWidth=.08;g.stroke();
+    for(let i=-2;i<=2;i++)ln(g,x+i*.4,-12.0,x+i*.18,-13.15,'rgba(230,236,240,.35)',.07);
+    ln(g,x-1.15,-12.0,x+1.15,-12.0,'#2a2d31',.28);ln(g,x,-13.2,x,-13.9,'#3a3d42',.25);
+    g.beginPath();g.moveTo(x,-13.8);g.quadraticCurveTo(x-1.2,-14.6,x-1.9-(front?0:.6),-13.2);g.quadraticCurveTo(x-.8,-13.9,x,-13.6);g.fillStyle='#c42a1e';g.fill();
+    return true;}
+  if(STY==='ainu'){
+    // long black hair, full beard and a patterned headband (matanpushi)
+    if(back){g.beginPath();g.ellipse(x,-11.4,1.05,1.15,0,0,Math.PI*2);g.fillStyle='#14100c';g.fill();ln(g,x-1,-10.6,x+1,-10.6,'#14100c',.6);}
+    else if(front){g.beginPath();g.arc(x,-11.85,1.0,Math.PI,0);g.fillStyle='#14100c';g.fill();ln(g,x-.95,-11.6,x-.95,-10.2,'#14100c',.4);ln(g,x+.95,-11.6,x+.95,-10.2,'#14100c',.4);
+      g.beginPath();g.moveTo(x-.75,-11.1);g.quadraticCurveTo(x,-9.4,x+.75,-11.1);g.lineTo(x+.5,-11.05);g.quadraticCurveTo(x,-10.6,x-.5,-11.05);g.closePath();g.fillStyle='#1c1612';g.fill();}
+    else{g.beginPath();g.arc(x-.05,-11.85,1.0,Math.PI*1.0,Math.PI*1.95);g.lineTo(x-.2,-11.3);g.closePath();g.fillStyle='#14100c';g.fill();ln(g,x-.8,-11.6,x-1.2,-10.0,'#14100c',.55);
+      g.beginPath();g.moveTo(x+.3,-11.2);g.quadraticCurveTo(x+1.05,-10.9,x+.8,-10.0);g.quadraticCurveTo(x+.2,-9.9,x+.1,-10.7);g.closePath();g.fillStyle='#1c1612';g.fill();}
+    ln(g,x-1.0,-12.05,x+1.0,-12.05,K2.lace,.36);for(let i=-2;i<=2;i++)circ(g,x+i*.42,-12.05,.09,K2.lace2);
+    return true;}
+  return false;
+}
 function headSide(g,K2){
   const kind=K2.kind;
   ln(g,.1,-10,.15,-10.7,SKIND,.75);
   // face and head
   g.beginPath();g.ellipse(.25,-11.5,.9,.98,0,0,Math.PI*2);g.fillStyle=lg(g,1.1,-12,-.7,-11,[SKIN,SKIND]);g.fill();
   circ(g,.85,-11.65,.1,'#1a1410');// eye
+  if(foreignHead(g,K2,.15,false,false))return;
   if(K2.helm){
     // menpo (face mask) with moustache
     poly(g,[[.35,-11.35],[1.28,-11.2],[1.2,-10.5],[.65,-10.3],[.25,-10.6]],lg(g,.3,-11.3,1.2,-10.4,['#6a2a20','#3a120c']),INK,.08);
@@ -1829,8 +1938,9 @@ function armSide(g,K2,h,near){
   circ(g,hx,hy,.38,near?SKIN:SKIND);
 }
 /* weapons (side view). returns hands and draw functions */
-function blade(g,x1,y1,x2,y2,cx,cy,len){g.beginPath();g.moveTo(x1,y1);g.quadraticCurveTo(cx,cy,x2,y2);g.strokeStyle=INK;g.lineWidth=.62;g.stroke();g.strokeStyle='#c9d0d6';g.lineWidth=.42;g.stroke();g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=.12;g.stroke();}
-function tsuka(g,x1,y1,x2,y2){ln(g,x1,y1,x2,y2,'#1d1510',.55);ln(g,x1,y1,x2,y2,'rgba(220,200,160,.35)',.12);const tx=x1+(x2-x1)*.98,ty=y1+(y2-y1)*.98;circ(g,tx,ty,.36,GOLD);}
+function blade(g,x1,y1,x2,y2,cx,cy,len){if(STY){cx=(x1+x2)/2;cy=(y1+y2)/2;if(STY==='ainu'){x2=x1+(x2-x1)*.62;y2=y1+(y2-y1)*.62;cx=(x1+x2)/2;cy=(y1+y2)/2;}}g.beginPath();g.moveTo(x1,y1);g.quadraticCurveTo(cx,cy,x2,y2);g.strokeStyle=INK;g.lineWidth=.62;g.stroke();g.strokeStyle='#c9d0d6';g.lineWidth=.42;g.stroke();g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=.12;g.stroke();}
+function tsuka(g,x1,y1,x2,y2){ln(g,x1,y1,x2,y2,'#1d1510',.55);ln(g,x1,y1,x2,y2,'rgba(220,200,160,.35)',.12);const tx=x1+(x2-x1)*.98,ty=y1+(y2-y1)*.98;circ(g,tx,ty,.36,GOLD);
+  if(STY==='gaya'){g.beginPath();g.arc(x1-(x2-x1)*.25,y1-(y2-y1)*.25,.42,0,Math.PI*2);g.strokeStyle='#c9a24a';g.lineWidth=.16;g.stroke();}}// ring pommel
 function shaft(g,x1,y1,x2,y2){ln(g,x1,y1,x2,y2,INK,.6);ln(g,x1,y1,x2,y2,WOODC,.38);ln(g,x1,y1,x2,y2,'rgba(255,230,190,.25)',.1);}
 function yariTip(g,x1,y1,x2,y2,len){const L=Math.hypot(x2-x1,y2-y1)||1,ux=(x2-x1)/L,uy=(y2-y1)/L;
   poly(g,[[x2-uy*.32,y2+ux*.32],[x2+ux*len,y2+uy*len],[x2+uy*.32,y2-ux*.32]],'#dfe4e8',INK,.08);ln(g,x2,y2,x2+ux*len*.9,y2+uy*len*.9,'rgba(255,255,255,.8)',.08);
@@ -1930,6 +2040,7 @@ function manFront(g,K2,fr,ph,mounted,noFlag,back,brace){
   poly(g,body,lg(g,-1.8,-10,1.8,-6.6,[shade(a,.3),a,shade(a,-.45)]),INK,.16);
   if(sam){for(let i=1;i<=6;i++){const y=-6.6-i*.5;ln(g,-1.8+(i>4?.1:0),y,1.8-(i>4?.1:0),y,i%2?K2.lace:K2.lace2,.12);}
     if(!back){ln(g,-.5,-9.9,-.4,-6.8,'rgba(0,0,0,.25)',.08);ln(g,.5,-9.9,.4,-6.8,'rgba(0,0,0,.25)',.08);}}
+  else if(STY==='ainu'){ainuPattern(g,-1.8,1.8,-9.7,-6.8);}
   else{for(const y of[-7.4,-8.2,-9.0])ln(g,-1.8,y,1.8,y,'rgba(0,0,0,.4)',.12);
     if(!back)mon(g,0,-8.4,.72,K2.p);}
   ln(g,-1.3,-9.8,-1.55,-7.2,'rgba(255,255,255,.25)',.24);
@@ -1947,10 +2058,16 @@ function manFront(g,K2,fr,ph,mounted,noFlag,back,brace){
   if(!back&&W.draw)W.draw(g,K2);
   if(!noFlag&&back)backFlagFront(g,K2,fr,true);
 }
+function ainuPattern(g,x0,x1,y0,y1){// indigo hems and bands with red stitching, like an attush robe
+  ln(g,x0,y1-.15,x1,y1-.15,'#23345a',.45);ln(g,x0+.3,y0+.2,x0+.3,y1,'#23345a',.35);ln(g,x1-.3,y0+.2,x1-.3,y1,'#23345a',.35);
+  g.beginPath();for(let x=x0+.2;x<x1-.2;x+=.5){g.moveTo(x,y1-.45);g.lineTo(x+.25,y1-.75);g.lineTo(x+.5,y1-.45);}g.strokeStyle='#b8322a';g.lineWidth=.08;g.stroke();
+  g.beginPath();g.arc((x0+x1)/2,(y0+y1)/2-.2,.55,0,Math.PI*1.6);g.strokeStyle='#23345a';g.lineWidth=.16;g.stroke();
+}
 function headFront(g,K2,back){
   const kind=K2.kind;
   g.beginPath();g.ellipse(0,-11.5,.88,.98,0,0,Math.PI*2);g.fillStyle=back?'#1b1714':lg(g,-.8,-12,.8,-11,[SKIN,SKIND]);g.fill();
   if(!back){circ(g,-.33,-11.62,.1,'#1a1410');circ(g,.33,-11.62,.1,'#1a1410');}
+  if(foreignHead(g,K2,0,true,back))return;
   if(K2.helm){
     const H=kind==='aka'?['#e0584a','#b22019','#5c0c07']:kind==='gen'?['#6a6270','#1d1b20','#050506']:['#5f5a55','#2b2826','#0d0c0b'];
     // shikoro flaring down both sides
@@ -2025,6 +2142,7 @@ function weaponFront(kind,fr,ph,flip,brace){
 
 /* ======================= HORSES ======================= */
 function horseCols(kind){
+  if(STY==='gaya')return{c:'#5a3b24',l:'#7c5636',d:'#2e1e12',mane:'#140d08',cloth:['#7a8088','#353a40'],trim:'#b22a20'};
   return kind==='aka'?{c:'#231c19',l:'#4c3d35',d:'#120d0b',mane:'#0c0908',cloth:['#e0301f','#7d1109'],trim:GOLD}
     :kind==='gen'?{c:'#d9d2c4',l:'#fbf8f0',d:'#9e968a',mane:'#e8e2d6',cloth:['#2a2530','#0e0c10'],trim:GOLD}
     :kind==='hcav'?{c:'#8a5a2e',l:'#b07a45',d:'#4d2f16',mane:'#1c120b',cloth:['#6f6250','#40382c'],trim:'#3a3024'}
@@ -2078,12 +2196,12 @@ function horseSide(g,kind,C,ph,fr){
   g.beginPath();g.arc(3.2,-8.2,1.5,-2.8,-.6);g.strokeStyle='rgba(0,0,0,.18)';g.lineWidth=.15;g.stroke();
   // tack: bridle, reins, saddle, flaps
   ln(g,6.2,-12.9,8.6,-10.9,'#1d130a',.18);ln(g,6.1,-13.6,6.7,-11.0,'#1d130a',.18);ln(g,8.2,-10.8,2.8,-12.6,'#1d130a',.16);
-  if(kind==='aka'||kind==='gen'){// lacquered horse armour and caparison
+  if(kind==='aka'||kind==='gen'||STY==='gaya'){// lacquered horse armour and caparison (iron barding for Gaya)
     poly(g,[[-6.4,-8.8],[2.4,-9.0],[2.8,-4.9],[-6.8,-5.0]],lg(g,0,-9,0,-4.9,C.cloth),INK,.12);
     for(let x=-6;x<2.4;x+=.9)ln(g,x,-8.8,x-.1,-5.0,kind==='aka'?'rgba(255,215,120,.3)':'rgba(230,190,90,.35)',.1);
     ln(g,-6.6,-5.2,2.7,-5.1,C.trim,.3);
     poly(g,[[5.2,-13.6],[7.6,-12.0],[7.2,-10.8],[5.4,-11.6]],kind==='aka'?'#c42418':'#2a2530',INK,.1);ln(g,5.6,-13,7.3,-11.7,GOLD,.16);
-    for(const x of[-6.4,-5.6,-4.8])ln(g,x,-7.4,x-.35,-3.8,kind==='aka'?'#ff3b24':'#e3b545',.5);
+    for(const x of[-6.4,-5.6,-4.8])ln(g,x,-7.4,x-.35,-3.8,STY==='gaya'?'#b22a20':kind==='aka'?'#ff3b24':'#e3b545',.5);
   }else{
     poly(g,[[-2.9,-9.3],[1.9,-9.3],[2.2,-6.2],[-3.1,-6.2]],lg(g,0,-9.3,0,-6.2,C.cloth),INK,.12);
     for(const x of[-5.3,-4.5,-3.7])ln(g,x,-8.4,x-.25,-6.6,'#8a3a22',.36);
@@ -2105,12 +2223,12 @@ function horseEnd(g,kind,C,ph,back){
     g.fillStyle=lg(g,-2.6,-11,2.6,-6,[C.l,C.c,C.d]);g.beginPath();g.ellipse(-1.45,-8.7,2.2,2.6,0,0,Math.PI*2);g.ellipse(1.45,-8.7,2.2,2.6,0,0,Math.PI*2);g.fill();
     ln(g,0,-10.6,0,-6.8,'rgba(0,0,0,.25)',.2);
     const tw=run?Math.sin(t)*.6:0;g.beginPath();g.moveTo(0,-10.2);g.quadraticCurveTo(tw,-7.5,tw*1.6,-4.4);g.strokeStyle=C.mane;g.lineWidth=1.2;g.stroke();
-    if(kind==='aka'||kind==='gen'){poly(g,[[-3.1,-9.4],[3.1,-9.4],[3.2,-6.0],[-3.2,-6.0]],lg(g,0,-9.4,0,-6,C.cloth),INK,.1);ln(g,-3.2,-6.2,3.2,-6.2,C.trim,.28);
+    if(kind==='aka'||kind==='gen'||STY==='gaya'){poly(g,[[-3.1,-9.4],[3.1,-9.4],[3.2,-6.0],[-3.2,-6.0]],lg(g,0,-9.4,0,-6,C.cloth),INK,.1);ln(g,-3.2,-6.2,3.2,-6.2,C.trim,.28);
       for(const x of[-2.4,-1.6,1.6,2.4])ln(g,x,-7.2,x,-4.2,kind==='aka'?'#ff3b24':'#e3b545',.45);}
   }else{
     // chest seen from the front
     g.fillStyle=lg(g,-2.8,-11.4,2.8,-6,[C.l,C.c,C.d]);g.beginPath();g.ellipse(0,-8.7,3.0,2.9,0,0,Math.PI*2);g.fill();ln(g,0,-10.8,0,-6.6,'rgba(0,0,0,.2)',.2);
-    if(kind==='aka'||kind==='gen'){poly(g,[[-2.6,-9.6],[2.6,-9.6],[2.4,-6.6],[-2.4,-6.6]],lg(g,0,-9.6,0,-6.6,C.cloth),INK,.1);ln(g,-2.5,-6.8,2.5,-6.8,C.trim,.26);}
+    if(kind==='aka'||kind==='gen'||STY==='gaya'){poly(g,[[-2.6,-9.6],[2.6,-9.6],[2.4,-6.6],[-2.4,-6.6]],lg(g,0,-9.6,0,-6.6,C.cloth),INK,.1);ln(g,-2.5,-6.8,2.5,-6.8,C.trim,.26);}
   }
   leg(-1.4,-7.0,l(1,0),true);leg(1.4,-7.0,l(-1,3.1),true);
   poly(g,[[-2.2,-10.4],[2.2,-10.4],[2.5,-9.4],[-2.5,-9.4]],'#1b1714',INK,.1);ln(g,-2.3,-10.3,2.3,-10.3,GOLD,.14);
@@ -2192,7 +2310,7 @@ function drawGuard(g,x,fl,tier){// a retainer standing beside the lord with a sp
 }
 /* ======================= BUILDINGS: painted once, then stamped ======================= */
 const BSS=5,BSPR={};
-const BBOX={dock:[-26,-26,26,18],hq:[-60,-62,60,26],tower:[-19,-40,19,15],fence:[-23,-13,23,10],keep:[-42,-64,42,26],keep2:[-54,-90,54,30],shrine:[-28,-28,28,18]};
+const BBOX={yard:[-38,-40,38,22],dock:[-26,-26,26,18],hq:[-60,-62,60,26],tower:[-19,-40,19,15],fence:[-23,-13,23,10],keep:[-42,-64,42,26],keep2:[-54,-90,54,30],shrine:[-28,-28,28,18]};
 function buildBuildingSprites(only){
   for(let side=0;side<2;side++){if(only!=null&&side!==only)continue;
     for(const kind in BBOX){const[b0,b1,b2,b3]=BBOX[kind];
@@ -2299,6 +2417,20 @@ const BPAINT={
     g.fillStyle='#2b2118';g.fillRect(-4,-3,8,8);
     barkRoof(g,[[-14,-7],[-9,-16],[9,-16],[14,-7],[0,-9]],-17,-7);
     ln(g,12,-14,12,-26,'#2a2119',.5);g.fillStyle=fl.flag;g.fillRect(12,-26,5.5,4);
+  },
+  yard(g,fl,side){// 造船所: a slipway with a hull on its ribs, a big shed, a crane and the jetty
+    shadowE(g,2,15,34,6,.25);
+    for(const x of[-28,-20,-12,-4,4,12,20,28])ln(g,x,10,x,17,'#3a2616',1.1);
+    g.fillStyle=lg(g,0,8,0,18,['#b08858','#8a6442','#5e4228']);g.fillRect(-32,8,64,9);for(let x=-31;x<32;x+=2.4)ln(g,x,8,x,17,'rgba(40,25,10,.35)',.25);
+    // shed
+    g.fillStyle='#6a4a2e';g.fillRect(-32,-14,24,22);g.fillStyle='#2b2118';g.fillRect(-26,-6,10,14);barkRoof(g,[[-35,-13],[-29,-26],[-11,-26],[-5,-13],[-20,-16]],-27,-13);
+    // slipway with a hull under construction
+    poly(g,[[-2,8],[30,8],[34,-6],[2,-6]],'#8a6a45','#3a2616',.3);
+    g.beginPath();g.moveTo(4,4);g.quadraticCurveTo(18,-14,32,-2);g.lineTo(28,4);g.closePath();g.fillStyle='#5a3c22';g.fill();
+    for(let x=8;x<30;x+=3.2)ln(g,x,4,x+2,-8+Math.abs(x-18)*.5,'#c9a06a',.45);
+    // crane
+    ln(g,0,8,0,-34,'#4a3520',1.1);ln(g,0,-34,20,-28,'#4a3520',.8);ln(g,20,-28,20,-14,'rgba(210,190,140,.8)',.3);ln(g,0,-24,10,-31,'#4a3520',.5);
+    ln(g,-30,-26,-30,-38,'#2a2119',.5);g.fillStyle=fl.flag;g.fillRect(-30,-38,6,4.5);
   },
   shrine(g,fl,side){// Heian shrine: bark roof with chigi and katsuogi, vermilion pillars, torii, stone lanterns
     shadowE(g,4,10,24,6.5,.28);
@@ -2463,7 +2595,7 @@ function drawFort(f){
   if(Math.abs(f.p)>.01&&Math.abs(f.p)<.999){ctx.strokeStyle=f.p<0?PAL[0].flag:PAL[1].flag;ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,36,-Math.PI/2,-Math.PI/2+P*Math.abs(f.p));ctx.stroke();}
   ctx.font='800 11px "Shippori Mincho B1",serif';ctx.textAlign='center';ctx.fillStyle='rgba(0,0,0,.55)';const ft=TT('砦','Fort');ctx.fillText(ft,x+.6,y+18.6);ctx.fillStyle='#fff';ctx.fillText(ft,x,y+18);
 }
-const SQUAD_KANJI={ship:'船',ship2:'関',ship3:'安',gen:'将',sword:'剣',spear:'槍',archer:'弓',cav:'騎',hcav:'弓騎',aka:'赤',ninja:'忍',cannon:'砲',eng:'工'},SQUAD_EN={ship:'Sh',ship2:'S2',ship3:'S3',gen:'G',sword:'Sw',spear:'Sp',archer:'Bw',cav:'Hs',hcav:'HA',aka:'Ak',ninja:'Nj',cannon:'Cn',eng:'Sa'};
+const SQUAD_KANJI={ship:'船',ship2:'関',ship3:'安',ship4:'鉄',gen:'将',sword:'剣',spear:'槍',archer:'弓',cav:'騎',hcav:'弓騎',aka:'赤',ninja:'忍',cannon:'砲',eng:'工'},SQUAD_EN={ship:'Sh',ship2:'S2',ship3:'S3',ship4:'S4',gen:'G',sword:'Sw',spear:'Sp',archer:'Bw',cav:'Hs',hcav:'HA',aka:'Ak',ninja:'Nj',cannon:'Cn',eng:'Sa'};
 function sqMark(k){return(EN()?SQUAD_EN:SQUAD_KANJI)[k];}
 function drawSquadMarkers(vr){
   const agg=new Map();
@@ -2691,20 +2823,25 @@ window.addEventListener('resize',()=>setTimeout(resize,30));
 function drawShip(e,strategic){// warship: hull on the water, a square sail with your crest standing up from it
   const x=e.ux,y=e.uy;
   if(strategic){ctx.fillStyle=COL[0];ctx.fillRect(x-5,y-3,10,6);return;}
-  const ca=Math.cos(e.ang),sa=Math.sin(e.ang),a=Math.atan2(ROT?ca:sa,ROT?-sa:ca),fc=flagC(),T=e.k.tier||1,Z=[1,1,1.3,1.65][T];
+  const ca=Math.cos(e.ang),sa=Math.sin(e.ang),a=Math.atan2(ROT?ca:sa,ROT?-sa:ca),fc=flagC(),T=e.k.tier||1,Z=[1,1,1.3,1.65,2.1][T],IRON=T>=4;
   ctx.save();ctx.translate(x,y);ctx.scale(Z,Z);
   // wake
   if(e.mv){ctx.strokeStyle='rgba(235,245,245,.45)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-Math.cos(a)*14-Math.sin(a)*5,-Math.sin(a)*14+Math.cos(a)*5);ctx.lineTo(-Math.cos(a)*30,-Math.sin(a)*30);ctx.lineTo(-Math.cos(a)*14+Math.sin(a)*5,-Math.sin(a)*14-Math.cos(a)*5);ctx.stroke();}
   ctx.save();ctx.rotate(a);
   ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(1.5,2.5,17,6.5,0,0,Math.PI*2);ctx.fill();
   ctx.beginPath();ctx.moveTo(18,0);ctx.quadraticCurveTo(12,-6.2,-6,-6);ctx.lineTo(-15,-5);ctx.lineTo(-15,5);ctx.lineTo(-6,6);ctx.quadraticCurveTo(12,6.2,18,0);ctx.closePath();
-  ctx.fillStyle='#5a3c22';ctx.fill();ctx.strokeStyle='#2a1a0e';ctx.lineWidth=.8;ctx.stroke();
-  ctx.fillStyle='#8a6a45';ctx.beginPath();ctx.moveTo(14,0);ctx.quadraticCurveTo(9,-4.2,-5,-4.2);ctx.lineTo(-13,-3.5);ctx.lineTo(-13,3.5);ctx.lineTo(-5,4.2);ctx.quadraticCurveTo(9,4.2,14,0);ctx.closePath();ctx.fill();
+  ctx.fillStyle=IRON?'#2e2f33':'#5a3c22';ctx.fill();ctx.strokeStyle=IRON?'#0e0f11':'#2a1a0e';ctx.lineWidth=.8;ctx.stroke();
+  ctx.fillStyle=IRON?'#4a4b50':'#8a6a45';ctx.beginPath();ctx.moveTo(14,0);ctx.quadraticCurveTo(9,-4.2,-5,-4.2);ctx.lineTo(-13,-3.5);ctx.lineTo(-13,3.5);ctx.lineTo(-5,4.2);ctx.quadraticCurveTo(9,4.2,14,0);ctx.closePath();ctx.fill();
   ctx.strokeStyle='rgba(40,25,12,.35)';ctx.lineWidth=.4;for(let i=-10;i<12;i+=3){ctx.beginPath();ctx.moveTo(i,-4);ctx.lineTo(i,4);ctx.stroke();}
   ctx.fillStyle=fc.c;for(let i=-10;i<11;i+=4.2){ctx.fillRect(i,-6.4,3.2,1.6);ctx.fillRect(i,4.8,3.2,1.6);}// shields along the gunwales
   ctx.strokeStyle='#3a2616';ctx.lineWidth=.7;const ph=(S.t*3+e.id)%6.28;for(let i=-8;i<10;i+=4){const o=Math.sin(ph+i)*1.5;ctx.beginPath();ctx.moveTo(i,-6.2);ctx.lineTo(i+o,-10);ctx.moveTo(i,6.2);ctx.lineTo(i+o,10);ctx.stroke();}
   ctx.fillStyle='#1c1916';for(const[px,py]of[[-9,-1.6],[-4,1.8],[2,-1.8],[7,1.6]]){ctx.beginPath();ctx.arc(px,py,1.3,0,Math.PI*2);ctx.fill();}
-  if(T>=2){// a deck house (and on the atakebune a tall armoured superstructure)
+  if(IRON){// iron plates, rivets and gun ports
+    ctx.fillStyle='#1c1d20';ctx.fillRect(-11,-4.2,20,8.4);ctx.strokeStyle='#5c5e64';ctx.lineWidth=.35;for(let i=-10;i<9;i+=3){ctx.strokeRect(i,-4.2,3,8.4);}
+    ctx.fillStyle='#9a9ca2';for(let i=-10;i<9;i+=1.5){ctx.fillRect(i,-4.6,.5,.5);ctx.fillRect(i,4.1,.5,.5);}
+    ctx.fillStyle='#0a0a0c';for(let i=-8;i<8;i+=4){ctx.fillRect(i,-6.6,1.6,1.2);ctx.fillRect(i,5.4,1.6,1.2);}
+    ctx.fillStyle='#2b2c30';ctx.fillRect(-6,-2.6,10,5.2);ctx.fillStyle='#d8b04a';ctx.fillRect(-6,-.3,10,.6);}
+  else if(T>=2){// a deck house (and on the atakebune a tall armoured superstructure)
     ctx.fillStyle='#6b4a2e';ctx.fillRect(-9,-3.6,T>=3?16:11,7.2);ctx.strokeStyle='#2a1a0e';ctx.lineWidth=.5;ctx.strokeRect(-9,-3.6,T>=3?16:11,7.2);
     ctx.fillStyle=fc.c;ctx.fillRect(-9,-3.6,T>=3?16:11,1.2);ctx.fillRect(-9,2.4,T>=3?16:11,1.2);
     if(T>=3){ctx.fillStyle='#3a2616';ctx.fillRect(-6,-2.2,9,4.4);ctx.fillStyle='#d8b04a';ctx.fillRect(-6,-.3,9,.6);}}
@@ -2863,6 +3000,8 @@ async function startLevel(level,tut,mode,snap,replay){
   await newGame(level,tut,replay);
   if(snap){restoreSnapshot(snap);homeView();running=true;toast(TT('合戦の途中から再開しました','Resumed the battle where you left off'));return;}
   running=true;if(tut)beginTutorial();else if(S.replay!=null)toast(TT(`${S.prov.region}の最終決戦をもう一度。城はあのときのまま`,`The final battle of ${rn(S.prov.region)} again — your castles stand as they were`));else toast((S.prov?TT(`${styled()}、${pn(S.prov.prov)}に攻め入る。`,`${styled()} invades ${pn(S.prov.prov)}. `):'')+TT(`敵は本陣のまわりを固めている（家紋：${nm(KAMON.find(k=>k.id===ENEMY_MON))}）`,`The enemy (crest: ${nm(KAMON.find(k=>k.id===ENEMY_MON))}) has fortified its HQ`));
+  if(S.eStyle&&!snap&&!tut)setTimeout(()=>{if(S&&S.eStyle&&!S.landing)toast(S.eStyle==='gaya'?TT('任那の兵：鉄の小札鎧に羽飾りの冑、鎧をまとった馬。硬いが足は遅い','Gaya troops: iron lamellar, plumed helmets and armoured horses — tough but slow'):TT('蝦夷の兵：鎧はつけず素早い。毒矢に注意。騎馬はいない','Ainu warriors: no armour and quick on their feet. Beware poisoned arrows. No cavalry'));},8500);
+  if(S.landing&&!snap)setTimeout(()=>{if(S&&S.landing)toast(TT('任那は海の向こう。自陣の岸に船着場を建て、船に兵を乗せて対岸へ上陸せよ','Mimana lies across the sea. Build a dock on your shore, load your troops and land on the far coast'));},4200);
   if(!tut&&S.replay==null&&WORLD.hill&&(MODE==='nation'?S.stage===1:S.level<=2))setTimeout(()=>{if(S&&S.phase==='build')toast(TT('自陣の道の先に高台がある。高台に櫓と弓を置き、手前に堀を掘ると守りやすい','There is high ground on the road ahead of your camp. Put towers and bows on it and dig a moat in front'));},4200);
 }
 function resume(){SFX.click();ov.hidden=true;running=true;}
@@ -3084,6 +3223,7 @@ function showEnd(win){
   if(win&&NAT&&c){
     if(c.replay)carry=TT(`<p style="color:var(--kin);font-weight:700">${S.prov.region}の最終決戦に再び勝利した！</p><p>再戦の結果は進み具合には影響しません。</p>`,`<p style="color:var(--kin);font-weight:700">You won the final battle of ${rn(S.prov.region)} again!</p><p>Replays do not change your progress.</p>`);
     else if(c.pacified)carry=TT(`<p style="color:var(--kin);font-weight:700">${S.prov.region}を平定した！</p><p>この地方の城は絵巻に残り、タイトルの「攻め取った国々」からいつでも最終決戦をやり直せます。城のそばの兵 <b>${c.units}人</b>は「${S.prov.region}軍」として次の地方へ連れて行き（兵数の上限1000人とは別枠）、天守と砦の力の1/3がMP回復としてずっと残ります（<b style="color:var(--kin)">+${c.add.toFixed(1)}/秒</b>、合計 +${((SAVE.nat&&SAVE.nat.income)||0).toFixed(1)}）。</p>`,`<p style="color:var(--kin);font-weight:700">${rn(S.prov.region)} is pacified!</p><p>Its castles are kept on a scroll — replay the final battle any time from "Conquered lands". The <b>${c.units}</b> soldiers near your castles march on as the ${rn(S.prov.region)} Army (outside the 1000-soldier limit), and 1/3 of your keeps' and forts' power stays as MP income (<b style="color:var(--kin)">+${c.add.toFixed(1)}/s</b>, total +${((SAVE.nat&&SAVE.nat.income)||0).toFixed(1)}).</p>`);
+    else if(c.landed)carry=TT(`<p style="color:var(--kin);font-weight:700">上陸成功！</p><p>海を渡った兵 <b>${c.units}人</b>が、任那の地で次の戦いに加わる。</p>`,`<p style="color:var(--kin);font-weight:700">The landing succeeded!</p><p>The <b>${c.units}</b> troops who crossed fight on in Mimana.</p>`);
     else carry=TT(`<p>同じ地方の地図のまま、次の国の敵はさらに奥に陣を構えます。引き継ぐもの：城 <b>${c.castles}</b>・城の近くの兵 <b>${c.units}人</b>（${S.prov.prov}国軍。兵数の上限とは別枠）${c.castles?'':'（石垣・天守以上の城があると、城と近くの兵が残る）'}</p>`,`<p>Same map, and the next enemy camps deeper in. Carried over: <b>${c.castles}</b> castles and <b>${c.units}</b> soldiers near them (the ${pn(S.prov.prov)} Army, outside the soldier limit)${c.castles?'':' (stone walls or keeps keep their castle and nearby troops)'}</p>`);
   }
   openOv('end',`<div class="card">
@@ -3094,6 +3234,8 @@ function showEnd(win){
       <div><small>${TT('挟撃','Pincers')}</small>${S.pincers}</div><div><small>${TT('決戦時間','Battle time')}</small>${fmt(S.battleT)}</div>
     </div>
     ${win?unlockMsg(nL):''}
+    ${win&&NAT&&S.replay==null&&L===HIDDEN_FROM?TT('<p style="color:var(--shu);font-weight:800;font-size:15px">隠しステージが開かれた――海の向こう、任那へ。</p>','<p style="color:var(--shu);font-weight:800;font-size:15px">A hidden stage opens — across the sea to Mimana.</p>'):''}
+    ${win&&NAT&&S.replay==null&&L===HIDDEN_FROM+5?TT('<p style="color:var(--shu);font-weight:800;font-size:15px">さらなる隠しステージ――北の大地、北海道へ。</p>','<p style="color:var(--shu);font-weight:800;font-size:15px">Another hidden stage — north to Hokkaido.</p>'):''}
     ${carry}
     ${win&&S.replay==null?`<p>${TT(`次の${lvName(MODE,nL)}：あなたのMP回復 <b style="color:var(--kin)">+${pr}/秒</b>、敵の兵の強さ <b style="color:var(--shu)">${eb}%</b>。進み具合は自動で保存されます。`,`Next, ${lvName(MODE,nL)}: your MP <b style="color:var(--kin)">+${pr}/s</b>, enemy strength <b style="color:var(--shu)">${eb}%</b>. Progress is saved automatically.`)}</p>`:''}
     <button class="big" id="goBtn">${S.replay!=null?TT('もう一度戦う','Fight again'):win?TT('次の陣へ','Next battle'):TT('もう一度','Try again')}</button>
@@ -3126,7 +3268,8 @@ ${EN()?`      <li><b>Skirmish</b> is a small one-screen battle. <b>Regional</b> 
       <li><b>Moats</b> can be dug in your camp (12 MP), or outside it next to your fences, walls, towers or 2+ soldiers for double cost (24 MP). Movement in a moat is 1/5 speed. Enemy <b>sappers</b> slowly fill moats in. <b>Pit traps</b> hold enemies for a while (7 fill one up)</li>
       <li><b>Upgrade</b>: fence → <b>stone wall</b> (60) → <b>tamon wall</b> (150); tower → <b>keep</b> (300) → <b>great keep</b> (600). Neighbouring stone walls join into a castle wall. Keeps shoot hard and raise MP</li>
       <li><b>Shrines</b> (250 MP, up to 3 in your camp): each gives your troops +5% attack and -5% damage taken. The enemy builds them too in later battles</li>
-      <li>Build a <b>Dock</b> (80 MP) on a shore to launch <b>warships</b> (100 MP). Ships sail only on water and shoot the shore (only arrows can hit them). Select troops and tap a ship to board (warship 20, sekibune 40, atakebune 80; ships and the troops aboard don't count toward the 1000 limit, up to 500 at sea); select the ship and tap land to sail to the shore and land them anywhere but cliffs. Upgrade beside a dock: <b>Sekibune</b> (150) → <b>Atakebune</b> (300). In Conquest ships unlock in Hokuriku, horse archers in the second region</li>
+      <li>Build a <b>Dock</b> (80 MP) on a shore to launch <b>warships</b> (100 MP). Ships sail only on water and shoot the shore (only arrows can hit them). Select troops and tap a ship to board (warship 20, sekibune 40, atakebune 80; ships and the troops aboard don't count toward the 1000 limit, up to 500 at sea); select the ship and tap land to sail to the shore and land them anywhere but cliffs. Upgrade beside a dock: <b>Sekibune</b> (150) → <b>Atakebune</b> (300). Upgrading a dock makes a <b>Shipyard</b> (400): beside it an atakebune becomes an ironclad <b>Tekkosen</b> (600, carries 300), and up to 1000 troops can sail. Select a ship and tap it to land its troops right there. In Conquest ships unlock in Hokuriku, horse archers in the second region, Akazonae in San-yo</li>
+      <li>Any soldier holding position <b>right behind your fence or wall</b> — even swords, spears and riders — shoots arrows at enemies approaching the wall (a little weaker than archers)</li>
       <li><b>Fences in the enemy camp</b>: with 10+ of your soldiers on the spot, outnumbering nearby enemies at least 2 to 1, you can put up fences even inside the enemy camp</li>
       <li><b>Sappers</b> tear down fences, walls and towers quickly but are weak against soldiers</li>
       <li><b>Akazonae</b> are crimson-armoured riders: strong at all times, and <b>charging downhill</b> puts them in charge mode for a while (1.25× speed, 2.4× attack). <b>Horse archers</b> unlock at battle 2. Your <b>crest</b> appears on their banners</li>
@@ -3147,7 +3290,8 @@ ${EN()?`      <li><b>Skirmish</b> is a small one-screen battle. <b>Regional</b> 
       <li><b>堀</b>は自陣に掘れる（12MP）。味方の柵・城壁・櫓や兵（2人以上）のそばなら自陣の外にも掘れるが、MPは2倍（24MP）。中は歩く速さが1/5になる。敵の<b>工兵</b>は堀を少しずつ埋めてくる。<b>落とし穴</b>は敵が落ちるとしばらく出られない（7人で埋まる）</li>
       <li><b>築城</b>：柵→<b>石垣</b>(60)→<b>多聞櫓</b>(150)、櫓→<b>天守</b>(300)→<b>大天守</b>(600)。となり合う石垣はつながって城壁になる。天守は強い矢で守りMPも増える。</li>
       <li><b>神社</b>（MP250、自陣に3つまで）：1つごとに味方の攻撃+5%、受けるダメージ-5%。敵も陣が進むと神社を建てる</li>
-      <li><b>船着場</b>（MP80）を水辺に建てると、そこから<b>船</b>（MP100）を出せる。船は水の上だけを進み弓で岸を射る（届くのは矢だけ）。兵を選んで船をタップすると乗船（船20人・関船40人・安宅船80人。船と乗っている兵は兵数の上限1000人とは別枠で、全部で500人まで）、船を選んで陸をタップすると岸へ向かい、絶壁でなければどこにでも上陸する。船着場のそばで「築城」すると<b>関船</b>(150)→<b>安宅船</b>(300)。全国戦では北陸から使える。弓騎は2つ目の地方から</li>
+      <li><b>船着場</b>（MP80）を水辺に建てると、そこから<b>船</b>（MP100）を出せる。船は水の上だけを進み弓で岸を射る（届くのは矢だけ）。兵を選んで船をタップすると乗船（船20人・関船40人・安宅船80人。船と乗っている兵は兵数の上限1000人とは別枠で、全部で500人まで）、船を選んで陸をタップすると岸へ向かい、絶壁でなければどこにでも上陸する。船着場のそばで「築城」すると<b>関船</b>(150)→<b>安宅船</b>(300)。船着場を築城すると<b>造船所</b>(400)になり、そのそばで安宅船を<b>鉄甲船</b>(600・300人乗り)にでき、船に乗れる兵が全部で1000人になる。船を選んでその船をタップすると、その場で上陸。全国戦では船は北陸から、弓騎は2つ目の地方から、赤備は山陽（中国地方）から使える</li>
+      <li><b>柵・石垣のすぐ後ろ</b>で待機している兵は、剣・槍・騎馬でも、塀に近づく敵に弓を射かける（弓兵より少し弱い）</li>
       <li><b>敵陣の柵</b>：その場に味方が10人以上いて、近くの敵の2倍以上いれば、敵陣の中にも柵を建てられる</li>
       <li><b>工兵</b>は柵・石垣・櫓を壊すのが速いが、人との戦いには弱い</li>
       <li><b>赤備</b>は真紅の騎馬武者。普段から強く、<b>高所から駆け下りると</b>しばらく突撃モード（速さ1.25倍・攻撃力2.4倍）。陣が進むと<b>弓騎</b>（第2陣）も使える。タイトルで<b>家紋</b>を選ぶと赤備の旗に入る</li>
@@ -3353,6 +3497,10 @@ function order(us,ex,ey){
     if(tgt){const fl=fieldTo(tgt.x,tgt.y);let n=0;for(const u of land0){if(u.k.gen)continue;u.boardOn=tgt;u.lord=null;u.st='move';u.then='hold';u.ax=tgt.x;u.ay=tgt.y;u.gx=tgt.x;u.gy=tgt.y;u.fld=fl;u.tg=null;n++;}
       toast(TT(n+'人が船に向かう（'+nm(tgt.k)+'：'+cargoN(tgt)+'/'+tgt.k.cap+'人）',n+' troops heading aboard ('+nm(tgt.k)+': '+cargoN(tgt)+'/'+tgt.k.cap+')'));S.tutMoved=1;SFX.click();return'board';}}
   const ships=us.filter(u=>u.k.ship);
+  // tap the selected ship itself: put its troops ashore right where it is
+  if(ships.length){const me=ships.find(s=>Math.hypot(s.x-ex,s.y-ey)<s.r+16);
+    if(me){let n=0;for(const s of ships)if(cargoN(s)){s.unload={x:s.x,y:s.y};s.st='hold';s.ax=s.x;s.ay=s.y;s.unloadT=0;n++;}
+      if(n){toast(TT('その場で上陸する','Landing right here'));SFX.click();return'unload';}}}
   // a ship with troops aboard ordered onto land sails to the nearest shore and puts them ashore there
   for(const u of ships){u.unload=cargoN(u)&&passable(ex,ey)?{x:ex,y:ey}:null;}
   const unl=ships.some(u=>u.unload);
@@ -3394,8 +3542,8 @@ function place(x,y){
     return false;
   }
   if(sel==='up'){const r=upgradeAt(x,y);
-    if(r==='none')toast(TT('味方の柵・石垣・櫓・天守をタップしてください','Tap one of your fences, walls, towers or keeps'));else if(r==='dock')toast(TT('船の築城は船着場のそばでできる','Ships are upgraded beside a dock'));else if(r.startsWith('mp:'))toast(TT('MPが足りません（'+r.slice(3)+'必要）','Not enough MP ('+r.slice(3)+' needed)'));
-    else{SFX.drums();toast(EN()?{ship2:'Refitted as a Sekibune! Tougher, stronger bows, carries 40',ship3:'An Atakebune! A floating fortress that carries 80',keep:'A keep rises! MP +2.5/s',keep2:'The great keep is complete! MP +4.5/s',wall:'Stone wall! It joins neighbouring walls into a castle wall',wall2:'Tamon wall! Arrows fly from the wall'}[r]:{ship2:'関船に大きくなった！ 丈夫になり弓も強く、40人乗れる',ship3:'安宅船になった！ 海に浮かぶ城。80人乗れる',keep:'天守閣がそびえ立った！ MP回復 +2.5/秒',keep2:'大天守が完成した！ MP回復 +4.5/秒',wall:'石垣になった！ となりの石垣とつながって城壁になる',wall2:'多聞櫓になった！ 城壁から矢を放つ'}[r]);return true;}return false;}
+    if(r==='none')toast(TT('味方の柵・石垣・櫓・天守をタップしてください','Tap one of your fences, walls, towers or keeps'));else if(r==='dock')toast(TT('船の築城は船着場のそばでできる','Ships are upgraded beside a dock'));else if(r==='yard')toast(TT('鉄甲船は造船所のそばで築城する（船着場を築城すると造船所）','Ironclads are built beside a shipyard (upgrade a dock into one)'));else if(r.startsWith('mp:'))toast(TT('MPが足りません（'+r.slice(3)+'必要）','Not enough MP ('+r.slice(3)+' needed)'));
+    else{SFX.drums();toast(EN()?{yard:'A shipyard! Ironclads can now be built, and up to 1000 troops can sail',ship4:'An ironclad Tekkosen! Carries 300',ship2:'Refitted as a Sekibune! Tougher, stronger bows, carries 40',ship3:'An Atakebune! A floating fortress that carries 80',keep:'A keep rises! MP +2.5/s',keep2:'The great keep is complete! MP +4.5/s',wall:'Stone wall! It joins neighbouring walls into a castle wall',wall2:'Tamon wall! Arrows fly from the wall'}[r]:{yard:'造船所になった！ 鉄甲船を造れて、船に乗れる兵が全部で1000人に',ship4:'鉄甲船が完成した！ 300人乗れる鉄の城',ship2:'関船に大きくなった！ 丈夫になり弓も強く、40人乗れる',ship3:'安宅船になった！ 海に浮かぶ城。80人乗れる',keep:'天守閣がそびえ立った！ MP回復 +2.5/秒',keep2:'大天守が完成した！ MP回復 +4.5/秒',wall:'石垣になった！ となりの石垣とつながって城壁になる',wall2:'多聞櫓になった！ 城壁から矢を放つ'}[r]);return true;}return false;}
   if(sel==='shrine'){if(y<PZ||!passable(x,y)){toast(TT('神社は自陣にだけ建てられる','Shrines can only go in your camp'));return false;}if(S.ents.filter(e=>e.side===0&&e.k.shrine).length>=3){toast(TT('神社は3つまでです','Up to 3 shrines'));return false;}}
   if(sel==='ship'){// warships are built at your dock and launched from its jetty
     const d=ownDockNear(x,y,160);
@@ -3473,7 +3621,8 @@ function up(e){
     const[wx,wy]=toWorld(sx,sy);
     if(drag.len<18){
       const gAt=genAt(sx,sy);let sq=gAt?null:squadAt(sx,sy);
-      if(sq!==null&&S.sel.some(u=>!u.k.ship)&&K[(S.squads.get(sq)||{}).kind]&&K[S.squads.get(sq).kind].ship)sq=null;// tapping a ship with soldiers selected = board it
+      if(sq!==null&&S.sel.some(u=>!u.k.ship)&&K[(S.squads.get(sq)||{}).kind]&&K[S.squads.get(sq).kind].ship)sq=null;
+      if(sq!==null&&S.sel.length&&S.sel.every(u=>u.k.ship)&&S.sel.some(u=>u.sq===sq))sq=null;// tapping the selected ship = land its troops here// tapping a ship with soldiers selected = board it
       if(gAt){S.sel=[gAt];toast(TT('将軍を選択（配下'+(gAt.retN||0)+'人）。下の「攻勢」「死守」か、行き先をタップ','General selected ('+(gAt.retN||0)+' men). Attack, Hold, or tap a destination'));}
       else if(sq!==null){S.sel=S.ents.filter(u=>u.sq===sq&&u.side===0);toast(TT(K[S.sel[0].kind].n+S.sel.length+'人を選択。行き先をタップ',S.sel.length+' '+nm(K[S.sel[0].kind])+' selected. Tap where to go'));}
       else if(S.sel.length){const res=order(S.sel,wx,wy);if(!res)toast(TT(S.sel.length+'人が移動。別の場所をタップで再指示',S.sel.length+' troops moving. Tap elsewhere to redirect'));}
@@ -3521,7 +3670,7 @@ applyLang();
 if(SAVE.ie==null)showNanori({first:1,back:showTitle});else showTitle();
 try{const A=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.App;
   if(A)A.addListener('backButton',()=>{if(ov.hidden){showPause();return;}if(ovMode==='pause')resume();else if(ovMode==='help')helpBack();else if(ovMode==='title')A.exitApp();else showTitle();});}catch(e){}
-if(/[?&]shots/.test(location.search))window.__k={get WORLD(){return WORLD},order,nearWater,ownDockNear,upgradeAt,passable,water,place,canBuild,setSel:v=>{sel=v;mode='place';},get EZ0(){return EZ0},step,render,buildBuildingSprites,BSPR,drawLord,lordTier,PAL4:PAL,trenchCost,SAVE,save,get E(){return E},get EW(){return EW},get EH(){return EH},get ER(){return ER},get SPR(){return SPR},UNITK,setGenCmd,assignRetinue,saveCampaign,campCarry,get EZ(){return EZ},get EZ0(){return EZ0},get HQP(){return HQP},drawRider,PAL,drawMon,myMon,get S(){return S},upgradeAt,computeFog,visAt,mk,tryTrench,spawn,startBattle,startLevel,cam,fitView,homeView,clampCam,order,fieldTo,elev,get PZ(){return PZ},get H(){return H},get W(){return W},get running(){return running},set running(v){running=v}};
+if(/[?&]shots/.test(location.search))window.__k={get WORLD(){return WORLD},setEnemyStyle,buildSprites,fieldTo,REGIONS,toScreen,order,nearWater,ownDockNear,upgradeAt,passable,water,place,canBuild,setSel:v=>{sel=v;mode='place';},get EZ0(){return EZ0},step,render,buildBuildingSprites,BSPR,drawLord,lordTier,PAL4:PAL,trenchCost,SAVE,save,get E(){return E},get EW(){return EW},get EH(){return EH},get ER(){return ER},get SPR(){return SPR},UNITK,setGenCmd,assignRetinue,saveCampaign,campCarry,get EZ(){return EZ},get EZ0(){return EZ0},get HQP(){return HQP},drawRider,PAL,drawMon,myMon,get S(){return S},upgradeAt,computeFog,visAt,mk,tryTrench,spawn,startBattle,startLevel,cam,fitView,homeView,clampCam,order,fieldTo,elev,get PZ(){return PZ},get H(){return H},get W(){return W},get running(){return running},set running(v){running=v}};
 requestAnimationFrame(frame);
 })();
 </script>
