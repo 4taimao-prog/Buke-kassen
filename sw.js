@@ -1,5 +1,5 @@
 // 武家合戦: plays from the copy saved on the phone first; only a genuine, complete game page from the server updates it.
-const CACHE='buke-v41';
+const CACHE='buke-v42';
 const CORE=['./','index.html','gfx.js','manifest.webmanifest','icon-192.png','icon-512.png','icon-180.png','icon-1024.png'];
 const MARK='name="app-id" content="buke-kassen"';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(CORE.map(u=>fetch(u,{cache:'reload'}).then(r=>{if(r.ok)return c.put(u,r);}).catch(()=>{})))).then(()=>self.skipWaiting()));});

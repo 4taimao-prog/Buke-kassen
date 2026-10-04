@@ -3352,7 +3352,7 @@ function applyLang(){
   document.querySelectorAll('.ub').forEach(b=>{const kd=b.id.slice(3),n=b.querySelector('.nm');if(n)n.textContent=kd==='cmd'?TT('指揮','Command'):nm(K[kd]);});
   try{if(S){updateButtons();hud();}else{$('#lv').textContent=TT('第1陣','Battle 1');$('#phase').textContent=TT('陣地構築','Deploy');$('#rate').textContent=TT('+8.0/秒','+8.0/s');$('#modeBtn').textContent=TT('全軍突撃','All attack');$('#startBtn').textContent=TT('開戦する','Start battle');}}catch(e){}
 }
-const APP_VER='2026.10.04-50';
+const APP_VER='2026.10.04-51';
 function showTitle(){
   let m=MODES[SAVE.mode]?SAVE.mode:'nation';
   const draw=()=>{
@@ -4003,7 +4003,7 @@ function frame(now){
 let midT=15;
 setMode(SAVE.mode||'nation');resetGrid();resize();applyFlag();buildSprites();
 // the photo sprites arrive a moment after the page: rebuild once they are decoded
-GFXP.then(I=>{if(I){buildSprites();drawIcons();{const c=$('#tName canvas');if(c)drawPortrait(c);const pc=document.querySelector('#ov canvas.portrait');if(pc)drawPortrait(pc);}}});
+GFXP.then(I=>{if(I){buildSprites();drawIcons();{const c=$('#tName canvas');if(c)drawPortrait(c);const mc=$('#tMon canvas');if(mc){const g=mc.getContext('2d');g.clearRect(0,0,mc.width,mc.height);drawMon(g,myMon(),39,39,34,'#f1e6c6',null,'#29302d');}document.querySelectorAll('.mongrid button').forEach(x=>{const g=x.querySelector('canvas').getContext('2d');g.clearRect(0,0,108,108);drawMon(g,x.dataset.id,54,54,48,'#1a1a1e','#f3ecd9');});const pc=document.querySelector('#ov canvas.portrait');if(pc)drawPortrait(pc);}}});
 function drawIcons(){for(const kd of UNITK){const c=$('#ub-'+kd+' canvas'),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);const At=SPR[kd][0],fi=kd==='archer'||kd==='hcav'?3:0;
   if(At.photo){const F=GFXI.u[kd],f=F&&(F[fi?'side_atk':'side_stand']||F.side_stand);if(f){const s=Math.min(c.width/f.w,c.height/f.h)*.98,w=f.w*s,h=f.h*s;g.imageSmoothingQuality='high';g.drawImage(f.i,(c.width-w)/2,c.height-h,w,h);continue;}}
   const b=K[kd].horse?[-9,-21,20,20]:kd==='eng'?[-6,-15.5,15,14]:kd==='cannon'?[-11,-12,21,13]:[-5.5,-15.5,15,14];
